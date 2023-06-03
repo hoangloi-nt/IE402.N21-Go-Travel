@@ -3,14 +3,21 @@
 @tailwind utilities;
 
 @import "reset";
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;800;900&display=swap");
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@layer components {
+  .page-container {
+    max-width: 1440px;
+    @apply mx-auto;
+  }
+
+  body {
+    margin: 0;
+    font-family: "Montserrat", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
 }
 
 code {
