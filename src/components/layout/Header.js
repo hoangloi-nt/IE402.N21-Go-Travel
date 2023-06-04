@@ -22,7 +22,7 @@ const Header = () => {
 
   return (
     <div className="bg-[#6557B9] w-full h-full">
-      <div className="flex items-center justify-between text-white page-container py-[22px]">
+      <div className="flex items-center justify-between text-white page-container px-9 py-[22px]">
         <NavLink to="/">
           <img srcSet="/logoNew.png 1x" alt="logo" />
         </NavLink>
@@ -39,7 +39,7 @@ const Header = () => {
         </div>
         <div className="relative group">
           <UserIcon className="cursor-pointer hover:opacity-70"></UserIcon>
-          <div className="scale-0 absolute top-[50px] right-0 p-5 text-lg text-black bg-white rounded-lg shadow-sm flex flex-col gap-y-3 group-hover:scale-100 transition-all min-w-[150px]">
+          <div className="scale-0 absolute top-[50px] right-0 p-5 text-lg text-black bg-white rounded-lg shadow-sm flex flex-col gap-y-3 group-hover:scale-100 transition-all min-w-[150px] z-10">
             {isUser ? (
               <>
                 <p className="transition-all cursor-pointer hover:-translate-x-2">
