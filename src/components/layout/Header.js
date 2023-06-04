@@ -4,11 +4,11 @@ import { useState } from "react";
 
 const menuLinks = [
 	{
-		url: "/tour",
+		url: "/manage-tour",
 		title: "Chuyến đi",
 	},
 	{
-		url: "/location",
+		url: "/famous-site",
 		title: "Địa điểm",
 	},
 	{

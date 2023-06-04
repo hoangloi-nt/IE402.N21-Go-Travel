@@ -7,10 +7,12 @@ specifiers:
   postcss: ^8.4.24
   react: ^18.2.0
   react-dom: ^18.2.0
+  react-paginate: ^8.2.0
   react-router-dom: ^6.11.2
   react-scripts: 5.0.1
   sass: ^1.62.1
   styled-components: ^5.3.11
+  swiper: ^9.3.2
   tailwindcss: ^3.3.2
   web-vitals: ^2.1.4
 
@@ -20,10 +22,12 @@ dependencies:
   '@testing-library/user-event': 13.5.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-paginate: 8.2.0_react@18.2.0
   react-router-dom: 6.11.2_biqbaboplfbrettd7655fr4n2y
   react-scripts: 5.0.1_react@18.2.0+sass@1.62.1
   sass: 1.62.1
   styled-components: 5.3.11_biqbaboplfbrettd7655fr4n2y
+  swiper: 9.3.2
   web-vitals: 2.1.4
 
 devDependencies:
@@ -8502,6 +8506,15 @@ packages:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
     dev: false
 
+  /react-paginate/8.2.0_react@18.2.0:
+    resolution: {integrity: sha512-sJCz1PW+9PNIjUSn919nlcRVuleN2YPoFBOvL+6TPgrH/3lwphqiSOgdrLafLdyLDxsgK+oSgviqacF4hxsDIw==}
+    peerDependencies:
+      react: ^16 || ^17 || ^18
+    dependencies:
+      prop-types: 15.8.1
+      react: 18.2.0
+    dev: false
+
   /react-refresh/0.11.0:
     resolution: {integrity: sha512-F27qZr8uUqwhWZboondsPx8tnC3Ct3SxZA3V5WyEvujRyyNv0VYPhoBg1gZ8/MV5tubQp76Trw8lTv9hzRBa+A==}
     engines: {node: '>=0.10.0'}
@@ -9209,6 +9222,10 @@ packages:
     resolution: {integrity: sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==}
     dev: false
 
+  /ssr-window/4.0.2:
+    resolution: {integrity: sha512-ISv/Ch+ig7SOtw7G2+qkwfVASzazUnvlDTwypdLoPoySv+6MqlOV10VwPSE6EWkGjhW50lUmghPmpYZXMu/+AQ==}
+    dev: false
+
   /stable/0.1.8:
     resolution: {integrity: sha512-ji9qxRnOVfcuLDySj9qzhGSEFVobyt1kIOSkj1qZzYLzq7Tos/oUUWvotUPQLlrsidqsK6tBH89Bc9kL5zHA6w==}
     deprecated: 'Modern JS already guarantees Array#sort() is a stable sort, so this library is deprecated. See the compatibility table on MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#browser_compatibility'
@@ -9501,6 +9518,13 @@ packages:
       csso: 4.2.0
       picocolors: 1.0.0
       stable: 0.1.8
+    dev: false
+
+  /swiper/9.3.2:
+    resolution: {integrity: sha512-Kj9Z4kXRmJR3YT/Wj+XLWj8P6IcRt+WG38uL8M3/Wny7+6sV0TlP9vnE1X+Co9c7VzNooojWGnFa+Wf/9+CUMA==}
+    engines: {node: '>= 4.7.0'}
+    dependencies:
+      ssr-window: 4.0.2
     dev: false
 
   /symbol-tree/3.2.4:

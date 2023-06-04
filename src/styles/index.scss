@@ -10,8 +10,8 @@
 		max-width: 1440px;
 		@apply mx-auto;
 	}
-
 	body {
+		--swiper-navigation-size: 16px !important;
 		margin: 0;
 		font-family: "Montserrat", sans-serif;
 		-webkit-font-smoothing: antialiased;
@@ -29,8 +29,8 @@ code {
 .swiper-button-prev {
 	background-color: white;
 	border-radius: 100%;
-	width: 100px !important;
-	height: 100px !important;
+	width: 50px !important;
+	height: 50px !important;
 	display: flex;
 	justify-content: center;
 	align-items: center;
