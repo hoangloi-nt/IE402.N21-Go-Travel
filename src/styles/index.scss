@@ -24,3 +24,19 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.swiper-button-next,
+.swiper-button-prev {
+  background-color: white;
+  border-radius: 100%;
+  width: 100px !important;
+  height: 100px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.swiper-slide {
+  box-sizing: border-box;
+}
