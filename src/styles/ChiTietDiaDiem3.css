@@ -1,0 +1,106 @@
+.ChiTietDiaDiem {
+    width:100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    padding-top: 5vh;
+    padding-bottom: 5vh;
+    padding-left: 3vh;
+    align-items: center;
+}
+.ChiTietDiaDiem .information{
+    width:50%;
+    display: flex;
+    flex-direction: column;
+}
+.ChiTietDiaDiem .information .chitiet {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 25px;
+    font-weight: bold;
+    width: 100%;
+}
+.ChiTietDiaDiem .information .mucchuyendi {
+    width:100%;
+    display: flex;
+    flex-direction: row;
+    margin-left: 1vh;
+    margin-top: 3vh;
+    align-items: center;
+}
+.ChiTietDiaDiem .information .mucchuyendi .name {
+    width:60%;
+    display: flex;
+    flex-direction: column;
+}
+.ChiTietDiaDiem .information .mucchuyendi .name .ten{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight: bold;
+    font-size: 20px;
+}
+.ChiTietDiaDiem .information .mucchuyendi .name .addmota{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 20px;
+    border: none;
+    background-color: white;
+    margin-top: 20px;
+}
+
+.ChiTietDiaDiem .information .mucchuyendi .add {
+    width:40%;
+    margin-left: 5vh;
+    text-align: center;
+}
+.ChiTietDiaDiem .information .mucchuyendi .add .them {
+    width:40px;
+    height:40px;
+    border:1px solid black;
+    font-size: 30px;
+    cursor: pointer;
+    border-radius: 10px;
+    text-align: center;
+}
+.ChiTietDiaDiem .information .chitietmuc{
+    width:100%;
+    display: flex;
+    flex-direction: column;  
+    align-items: center;
+    margin-top: 20px;
+}
+.ChiTietDiaDiem .information .chitietmuc .thongtinchuyendi{
+    width:95%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid black;
+    margin-left: 25px;
+    border-radius: 10px;
+    padding-top: 10px;
+}
+.ChiTietDiaDiem .information .chitietmuc .thongtinchuyendi .imgdiadiem {
+    width:95%;
+    border-radius:20px;
+}
+.ChiTietDiaDiem .information .chitietmuc .thongtinchuyendi .ten {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+.ChiTietDiaDiem .information .chitietmuc .thongtinchuyendi .tinh {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 18px;
+    font-weight: 400;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.ChiTietDiaDiem .information .details {
+    overflow-y: scroll;
+    width:90%;
+    height:500px
+}
+.ChiTietDiaDiem .map {
+    width:50%;
+}
+.ChiTietDiaDiem .map .imgmap{
+    width:100%;    
+}

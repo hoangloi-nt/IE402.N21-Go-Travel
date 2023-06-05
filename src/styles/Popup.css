@@ -1,0 +1,35 @@
+.popup {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border:1px solid black;
+    padding: 3vh;
+    background-color: white;
+    border-radius: 5px;
+    justify-content: center;
+    width:40%;
+    text-align: center;
+}
+.popup .success {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight: bold;
+    font-size: 30px;
+}
+.popup .success .closebtn {
+    text-align: Right;
+    margin-bottom: 5vh;
+ }
+.popup .success .closebtn .close {
+    margin-left: 5vh;
+}
+.popup .img {
+    margin-top: 10px;
+    text-align: center;
+    align-items: center;
+}
+.popup .img .okpopup {
+    width:40%;
+    text-align: center;
+    align-items: center;
+}

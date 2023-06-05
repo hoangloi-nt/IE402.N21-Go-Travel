@@ -1,0 +1,77 @@
+.ChiTietDiaDiem2 {
+    width:100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 50px;
+}
+.ChiTietDiaDiem2 .header {
+    width: 95%;
+    border: 1px solid black;
+    height: 10vh;
+    border-radius: 10px;
+    background-color:darkslateblue;
+    color: white;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 23px;
+    font-weight: bold;
+    padding-top: 20px;
+    text-align: center;
+}
+.listchuyendi {
+    width:100%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+.listchuyendi .chuyendi {
+    width:95%;
+    border: 1px solid black;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    margin-top: 5vh;
+}
+.listchuyendi .chuyendi .imgchuyendi {
+    width: 40%;
+    padding-top: 5vh;
+    padding-bottom: 5vh;
+    margin-left: 5vh;
+}
+.listchuyendi .chuyendi .motachuyendi{
+    width:70%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.listchuyendi .chuyendi .motachuyendi .hrefchuyendi {
+    text-decoration: none;
+}
+.listchuyendi .chuyendi .motachuyendi .hrefchuyendi .namechuyendi{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.listchuyendi .chuyendi .motachuyendi .muc{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 20px;
+    margin-bottom: 40px;
+}
+.listchuyendi .chuyendi .motachuyendi .btnthem{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    width:40%;
+    height:50px;
+    color: white;
+    background-color: darkslateblue;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
