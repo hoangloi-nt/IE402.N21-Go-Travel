@@ -54,12 +54,18 @@ const Header = () => {
 							</>
 						) : (
 							<>
-								<p className="font-semibold text-[#6557B9] transition-all cursor-pointer hover:-translate-x-2">
+								<a
+									href="/signin"
+									className="font-semibold text-[#6557B9] transition-all cursor-pointer hover:-translate-x-2"
+								>
 									Đăng nhập
-								</p>
-								<p className="font-semibold text-[#6557B9] transition-all cursor-pointer hover:-translate-x-2">
+								</a>
+								<a
+									href="/register"
+									className="font-semibold text-[#6557B9] transition-all cursor-pointer hover:-translate-x-2"
+								>
 									Đăng ký
-								</p>
+								</a>
 							</>
 						)}
 					</div>

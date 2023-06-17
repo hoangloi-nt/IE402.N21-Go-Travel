@@ -2,7 +2,8 @@ import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import ManageTour from "pages/ManageTour";
 import FamousSitePage from "pages/FamousSitePage";
-
+import SigninPage from "pages/SigninAcount";
+import RegisterPage from "pages/RegisterAcount";
 const HomePage = lazy(() => import("pages/HomePage"));
 const TourDetails = lazy(() => import("pages/TourDetails"));
 const ChiTietDiaDiem = lazy(() => import("pages/ChiTietDiaDiem"));
@@ -18,6 +19,8 @@ function App() {
 					path="/famous-site"
 					element={<FamousSitePage></FamousSitePage>}
 				/>
+				<Route path="/signin" element={<SigninPage></SigninPage>} />
+				<Route path="/register" element={<RegisterPage></RegisterPage>} />
 				<Route path="/chitiet" element={<ChiTietDiaDiem></ChiTietDiaDiem>} />
 			</Routes>
 		</Suspense>
