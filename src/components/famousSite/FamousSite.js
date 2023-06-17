@@ -1,6 +1,6 @@
 import React from "react";
 
-const FamousSite = ({}) => {
+const FamousSite = () => {
 	return (
 		<div className="flex flex-col items-start justify-center gap-y-5 h-[385px]">
 			<img

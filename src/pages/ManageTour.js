@@ -1,7 +1,6 @@
 import React from "react";
 import Layout from "components/layout/Layout";
 import Tour from "components/tour";
-import PaginatedItems from "components/paginatedItems";
 
 const ManageTour = () => {
 	return (
