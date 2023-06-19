@@ -22,7 +22,10 @@ const Tour = () => {
 						Tổng chi phí: 3.000.000 VND / 1 người
 					</div>
 					<div className="flex gap-[22px]">
-						<button className="w-[42px] h-[42px] bg-[#6557B9] flex justify-center items-center">
+						<a
+							href="/tour-detail"
+							className="w-[42px] h-[42px] bg-[#6557B9] flex justify-center items-center"
+						>
 							<svg
 								width="20"
 								height="19"
@@ -35,7 +38,7 @@ const Tour = () => {
 									fill="white"
 								/>
 							</svg>
-						</button>
+						</a>
 						<button className="w-[42px] h-[42px] bg-[#E06E6E] flex justify-center items-center">
 							<svg
 								width="26"

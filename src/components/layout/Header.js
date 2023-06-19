@@ -4,6 +4,10 @@ import { useState } from "react";
 
 const menuLinks = [
 	{
+		url: "/",
+		title: "Trang chủ",
+	},
+	{
 		url: "/manage-tour",
 		title: "Chuyến đi",
 	},
@@ -11,17 +15,13 @@ const menuLinks = [
 		url: "/famous-site",
 		title: "Địa điểm",
 	},
-	{
-		url: "/contact",
-		title: "Liên hệ",
-	},
 ];
 
 const Header = () => {
 	const [isUser, setIsUser] = useState(false);
 
 	return (
-		<div className="bg-[#6557B9] w-full h-full">
+		<div className="bg-[#6557B9] w-full sticky top-0 z-[1111]">
 			<div className="flex items-center justify-between text-white page-container px-9 py-[22px]">
 				<NavLink to="/">
 					<img srcSet="/logoNew.png 1x" alt="logo" />

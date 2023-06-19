@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Layout from "components/layout/Layout";
+import Map from "components/Map/Map";
 import { useState } from "react";
 import EditTour from "components/EditTour";
-
+import { getPlacesData } from "api";
 const FakeTour = {
 	Name: "Tour cuối năm",
 	Description: "Đi 2 người",
@@ -38,6 +39,24 @@ const Locations = [
 ];
 
 const TourDetails = () => {
+	const [place, setPlace] = useState();
+	const [coords, setCoords] = useState({});
+	const [bounds, setBounds] = useState(null);
+	console.log(bounds);
+	useEffect(() => {
+		navigator.geolocation.getCurrentPosition(
+			({ coords: { latitude, longitude } }) => {
+				setCoords({ lat: latitude, lng: longitude });
+			},
+		);
+	}, []);
+	useEffect(() => {
+		console.log("coords: ", coords);
+		getPlacesData(bounds?.sw, bounds?.ne).then((data) => {
+			console.log(data);
+			setPlace(data);
+		});
+	}, [coords, bounds]);
 	const [isOpen, setIsOpen] = useState(false);
 
 	const openModal = () => {
@@ -49,9 +68,9 @@ const TourDetails = () => {
 	};
 	return (
 		<Layout>
-			<div className="h-screen bg-white">
-				<div className="relative grid grid-cols-7">
-					<div className="max-h-screen col-span-2 overflow-scroll">
+			<div className="bg-white">
+				<div className="relative grid grid-cols-8">
+					<div className="max-h-[calc(100vh-90px)] col-span-2 overflow-y-scroll">
 						<span className="flex justify-between mx-5 mt-5">
 							<h5 className="font-medium drop-shadow-md">Tên chuyến đi</h5>
 							{/* <span className="cursor-pointer">•••</span> */}
@@ -88,9 +107,8 @@ const TourDetails = () => {
 							))}
 						</div>
 					</div>
-
-					<div className="col-span-5 bg-slate-500">
-						<div className="absolute top-5 right-5 p-5 bg-white text-[14px] w-60 rounded-sm drop-shadow-md">
+					<div className="col-span-6">
+						<div className="z-[10] absolute top-5 right-5 p-5 bg-white text-[14px] w-60 rounded-sm drop-shadow-md">
 							<p className="mb-4">Tìm địa điểm</p>
 							<input
 								className="block w-full px-3 py-1 bg-white border rounded-md shadow-sm placeholder:text-slate-400 border-slate-300 focus:outline-none focus:border-slate-500"
@@ -99,6 +117,15 @@ const TourDetails = () => {
 								placeholder="Tìm kiếm địa điểm"
 							/>
 						</div>
+						{coords && (
+							<Map
+								// setChildClicked={setChildClicked}
+								setBounds={setBounds}
+								setCoords={setCoords}
+								coords={coords}
+								// places={filteredPlaces.length ? filteredPlaces : places}
+							/>
+						)}
 					</div>
 					{isOpen && (
 						<EditTour

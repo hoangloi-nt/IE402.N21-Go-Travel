@@ -13,9 +13,12 @@ const ManageTour = () => {
 					<div className="text-[20px] leading-[23px] text-[#6557B9]">
 						DANH SÁCH CHUYẾN ĐI HIỆN TẠI CỦA BẠN
 					</div>
-					<button className="py-[16px] px-[16px] text-white bg-[#6557B9] rounded font-semibold text-[16px] hover:opacity-60">
+					<a
+						href="/edit-tour"
+						className="py-[16px] px-[16px] text-white bg-[#6557B9] rounded font-semibold text-[16px] hover:opacity-60"
+					>
 						Thêm chuyến đi
-					</button>
+					</a>
 				</div>
 				<div className="flex flex-col items-center gap-[50px]">
 					<Tour></Tour>
