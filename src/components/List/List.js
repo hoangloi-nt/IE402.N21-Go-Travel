@@ -14,18 +14,16 @@ import useStyles from "./styles.js";
 
 const List = ({
 	places,
-	// type,
-	// setType,
-	// rating,
-	// setRating,
+	type,
+	setType,
+	rating,
+	setRating,
 	childClicked,
-	// isLoading,
+	isLoading,
 }) => {
 	const [elRefs, setElRefs] = useState([]);
 	const classes = useStyles();
-	const [type, setType] = useState("restaurants");
-	const [isLoading, setIsLoading] = useState(false);
-	const [rating, setRating] = useState("");
+
 	useEffect(() => {
 		setElRefs((refs) =>
 			Array(places?.length)
@@ -36,7 +34,9 @@ const List = ({
 
 	return (
 		<div className={classes.container}>
-			<Typography variant="h4">Food & Dining around you</Typography>
+			<Typography variant="h4">
+				<span className="capitalize">{type}</span> around you
+			</Typography>
 			{isLoading ? (
 				<div className={classes.loading}>
 					<CircularProgress size="5rem" />
@@ -68,16 +68,24 @@ const List = ({
 							<MenuItem value="4.5">Above 4.5</MenuItem>
 						</Select>
 					</FormControl>
-					<Grid container spacing={3} className={classes.list}>
-						{places?.map((place, i) => (
-							<Grid ref={elRefs[i]} key={i} item xs={12}>
-								<PlaceDetails
-									selected={Number(childClicked) === i}
-									refProp={elRefs[i]}
-									place={place}
-								/>
-							</Grid>
-						))}
+					<Grid
+						container
+						spacing={3}
+						className={`no-scrollbar ${classes.list}`}
+					>
+						{places?.map(
+							(place, i) =>
+								place.latitude &&
+								place.longitude && (
+									<Grid ref={elRefs[i]} key={i} item xs={12}>
+										<PlaceDetails
+											selected={Number(childClicked) === i}
+											refProp={elRefs[i]}
+											place={place}
+										/>
+									</Grid>
+								),
+						)}
 					</Grid>
 				</>
 			)}

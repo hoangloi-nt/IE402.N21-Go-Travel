@@ -1,44 +1,11 @@
 import React, { useEffect } from "react";
-import Layout from "components/layout/Layout";
 import Map from "components/Map/Map";
+import { Autocomplete } from "@react-google-maps/api";
 import { useState } from "react";
-import EditTour from "components/EditTour";
 import { getPlacesData } from "api";
-import { CssBaseline, Grid } from "@material-ui/core";
 import List from "components/List/List";
-const FakeTour = {
-	Name: "Tour cuối năm",
-	Description: "Đi 2 người",
-	Month: 6,
-	Year: 2023,
-};
-
-const Locations = [
-	{
-		id: 1,
-		Name: "Nha Trang",
-		Image: "/NhaTrang.jpg",
-		Province: "Khánh Hòa",
-		Country: "Việt Nam",
-		Description: "Vùng biển đẹp",
-	},
-	{
-		id: 2,
-		Name: "Đà Lạt",
-		Image: "/DaLat.jpg",
-		Province: "Lâm Đồng",
-		Country: "Việt Nam",
-		Description: "Vùng núi đẹp",
-	},
-	{
-		id: 3,
-		Name: "Hồ Chí Minh",
-		Image: "/HCM.jpg",
-		Province: "Hồ Chí Minh",
-		Country: "Việt Nam",
-		Description: "Vùng đô thị",
-	},
-];
+import Header from "components/layout/Header";
+import SearchIcon from "@material-ui/icons/Search";
 
 const ProvinceDetail = () => {
 	const [type, setType] = useState("restaurants");
@@ -52,7 +19,8 @@ const ProvinceDetail = () => {
 
 	const [autocomplete, setAutocomplete] = useState(null);
 	const [childClicked, setChildClicked] = useState(null);
-	const [isLoading, setIsLoading] = useState(true);
+
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		navigator.geolocation.getCurrentPosition(
@@ -62,31 +30,63 @@ const ProvinceDetail = () => {
 		);
 	}, []);
 	useEffect(() => {
+		const filtered = places.filter((place) => Number(place.rating) > rating);
+
+		setFilteredPlaces(filtered);
+	}, [places, rating]);
+	useEffect(() => {
 		if (bounds) {
-			getPlacesData(bounds?.sw, bounds?.ne).then((data) => {
-				console.log("Places:", data);
-				setPlaces(data);
+			setIsLoading(true);
+			getPlacesData(bounds?.sw, bounds?.ne, type).then((data) => {
+				setPlaces(data.filter((place) => place.name && place.num_reviews > 0));
+				setFilteredPlaces([]);
+				setRating("");
+				setIsLoading(false);
 			});
 		}
-	}, [bounds, coords]);
+	}, [bounds, type]);
+	const onLoad = (autoC) => setAutocomplete(autoC);
 
+	const onPlaceChanged = () => {
+		const lat = autocomplete.getPlace().geometry.location.lat();
+		const lng = autocomplete.getPlace().geometry.location.lng();
+
+		setCoords({ lat, lng });
+		console.log(autocomplete.getPlace().geometry);
+	};
 	return (
-		<Layout>
+		<>
+			<Header />
 			<div className="bg-white">
 				<div className="relative grid grid-cols-10">
 					<div className="max-h-[calc(100vh-90px)] col-span-3">
-						<List places={places}></List>
+						<List
+							childClicked={childClicked}
+							places={filteredPlaces.length ? filteredPlaces : places}
+							isLoading={isLoading}
+							type={type}
+							setType={setType}
+							rating={rating}
+							setRating={setRating}
+						></List>
 					</div>
 					<div className="col-span-7">
-						<div className="z-[10] absolute top-5 right-5 p-5 bg-white text-[14px] w-60 rounded-sm drop-shadow-md">
-							<p className="mb-4">Tìm địa điểm</p>
-							<input
-								className="block w-full px-3 py-1 bg-white border rounded-md shadow-sm placeholder:text-slate-400 border-slate-300 focus:outline-none focus:border-slate-500"
-								type="text"
-								name="name"
-								placeholder="Tìm kiếm địa điểm"
-							/>
-						</div>
+						<Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
+							<div className="z-[10] absolute top-5 right-5 w-[328px] p-5 bg-white text-[14px] rounded-sm drop-shadow-md">
+								<p className="mb-4">Tìm và thêm địa điểm</p>
+								<div className="relative">
+									<input
+										className="block w-full px-[32px] py-[6px] bg-white border rounded-md shadow-sm placeholder:text-slate-400 border-slate-300 focus:outline-none focus:border-slate-500"
+										type="text"
+										name="name"
+										placeholder="Tìm kiếm địa điểm"
+									/>
+									<div className="absolute left-[5px] top-[50%] translate-y-[-50%]">
+										<SearchIcon />
+									</div>
+								</div>
+							</div>
+						</Autocomplete>
 
 						{coords && (
 							<Map
@@ -94,14 +94,13 @@ const ProvinceDetail = () => {
 								setBounds={setBounds}
 								setCoords={setCoords}
 								coords={coords}
-								places={places}
-								// places={filteredPlaces.length ? filteredPlaces : places}
+								places={filteredPlaces?.length ? filteredPlaces : places}
 							/>
 						)}
 					</div>
 				</div>
 			</div>
-		</Layout>
+		</>
 	);
 };
 

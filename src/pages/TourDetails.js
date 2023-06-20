@@ -4,6 +4,8 @@ import Map from "components/Map/Map";
 import { useState } from "react";
 import EditTour from "components/EditTour";
 import { getPlacesData } from "api";
+import SearchIcon from "@material-ui/icons/Search";
+
 const FakeTour = {
 	Name: "Tour cuối năm",
 	Description: "Đi 2 người",
@@ -108,14 +110,19 @@ const TourDetails = () => {
 						</div>
 					</div>
 					<div className="col-span-6">
-						<div className="z-[10] absolute top-5 right-5 p-5 bg-white text-[14px] w-60 rounded-sm drop-shadow-md">
-							<p className="mb-4">Tìm địa điểm</p>
-							<input
-								className="block w-full px-3 py-1 bg-white border rounded-md shadow-sm placeholder:text-slate-400 border-slate-300 focus:outline-none focus:border-slate-500"
-								type="text"
-								name="name"
-								placeholder="Tìm kiếm địa điểm"
-							/>
+						<div className="z-[10] absolute top-5 right-5 w-[328px] p-5 bg-white text-[14px] rounded-sm drop-shadow-md">
+							<p className="mb-4">Tìm và thêm địa điểm</p>
+							<div className="relative">
+								<input
+									className="block w-full px-[32px] py-[6px] bg-white border rounded-md shadow-sm placeholder:text-slate-400 border-slate-300 focus:outline-none focus:border-slate-500"
+									type="text"
+									name="name"
+									placeholder="Tìm kiếm địa điểm"
+								/>
+								<div className="absolute left-[5px] top-[50%] translate-y-[-50%]">
+									<SearchIcon />
+								</div>
+							</div>
 						</div>
 						{coords && (
 							<Map

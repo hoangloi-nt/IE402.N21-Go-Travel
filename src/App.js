@@ -4,7 +4,6 @@ import ManageTour from "pages/ManageTour";
 import FamousSitePage from "pages/FamousSitePage";
 import SigninPage from "pages/SigninAcount";
 import RegisterPage from "pages/RegisterAcount";
-import Map from "components/Map/Map";
 import ProvinceDetail from "pages/ProvinceDetail";
 const HomePage = lazy(() => import("pages/HomePage"));
 const TourDetails = lazy(() => import("pages/TourDetails"));
