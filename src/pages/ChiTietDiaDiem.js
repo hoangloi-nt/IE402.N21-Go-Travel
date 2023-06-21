@@ -21,9 +21,12 @@ function ChiTietDiaDiem() {
 							lacus, dignissim pharetra ipsum blandit. Feugiat quis quam
 							consectetur lectus id quis tortor vel, mattis.
 						</div>
-						<button className="py-[25px] px-[65px] text-white bg-[#6557B9] rounded font-semibold text-[16px] hover:opacity-60">
+						<a
+							href="/edit-tour"
+							className="py-[25px] px-[65px] text-white bg-[#6557B9] rounded font-semibold text-[16px] hover:opacity-60"
+						>
 							Thêm chuyến đi
-						</button>
+						</a>
 					</div>
 				</div>
 			</div>

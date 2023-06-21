@@ -1,7 +1,12 @@
-import React from "react";
-import Layout from "components/layout/Layout";
+import React, { useEffect } from "react";
+import Map from "components/Map/Map";
 import { useState } from "react";
 import EditTour from "components/EditTour";
+import { searchPlacesData } from "api/searchLocationAPI";
+
+import Header from "components/layout/Header";
+import SearchBar from "components/searchBar/searchBar";
+import LocationItem from "components/locationItem/locationItem";
 
 const FakeTour = {
 	Name: "Tour cuối năm",
@@ -13,31 +18,47 @@ const FakeTour = {
 const Locations = [
 	{
 		id: 1,
-		Name: "Nha Trang",
-		Image: "/NhaTrang.jpg",
-		Province: "Khánh Hòa",
-		Country: "Việt Nam",
-		Description: "Vùng biển đẹp",
+		name: "Nha Trang",
+		image: "/NhaTrang.jpg",
+		province: "Khánh Hòa",
+		country: "Việt Nam",
+		description: "Vùng biển đẹp",
 	},
 	{
 		id: 2,
-		Name: "Đà Lạt",
-		Image: "/DaLat.jpg",
-		Province: "Lâm Đồng",
-		Country: "Việt Nam",
-		Description: "Vùng núi đẹp",
+		name: "Đà Lạt",
+		image: "/DaLat.jpg",
+		province: "Lâm Đồng",
+		country: "Việt Nam",
+		description: "Vùng núi đẹp",
 	},
 	{
 		id: 3,
-		Name: "Hồ Chí Minh",
-		Image: "/HCM.jpg",
-		Province: "Hồ Chí Minh",
-		Country: "Việt Nam",
-		Description: "Vùng đô thị",
+		name: "Hồ Chí Minh",
+		image: "/HCM.jpg",
+		province: "Hồ Chí Minh",
+		country: "Việt Nam",
+		description: "Vùng đô thị",
 	},
 ];
 
 const TourDetails = () => {
+	const [place, setPlace] = useState();
+	const [coords, setCoords] = useState({});
+	const [bounds, setBounds] = useState(null);
+	useEffect(() => {
+		navigator.geolocation.getCurrentPosition(
+			({ coords: { latitude, longitude } }) => {
+				setCoords({ lat: latitude, lng: longitude });
+			},
+		);
+	}, []);
+	useEffect(() => {
+		// searchPlacesData({ query: "pattery" }).then((data) => {
+		// 	console.log(data);
+		// 	setPlace(data);
+		// });
+	}, [coords, bounds]);
 	const [isOpen, setIsOpen] = useState(false);
 
 	const openModal = () => {
@@ -48,13 +69,13 @@ const TourDetails = () => {
 		setIsOpen(false);
 	};
 	return (
-		<Layout>
-			<div className="h-screen bg-white">
-				<div className="relative grid grid-cols-7">
-					<div className="max-h-screen col-span-2 overflow-scroll">
+		<>
+			<Header />
+			<div className="bg-white">
+				<div className="relative grid grid-cols-8">
+					<div className="max-h-[calc(100vh-90px)] col-span-2 overflow-y-scroll shadow-2xl no-scrollbar">
 						<span className="flex justify-between mx-5 mt-5">
 							<h5 className="font-medium drop-shadow-md">Tên chuyến đi</h5>
-							{/* <span className="cursor-pointer">•••</span> */}
 						</span>
 						<p
 							className="mt-3 mx-5 font-light text-[14px] cursor-pointer hover:underline"
@@ -67,38 +88,20 @@ const TourDetails = () => {
 						</p>
 						<div className="flex flex-col">
 							{Locations.map((location, index) => (
-								<a className="mb-7" href="/">
-									<img
-										src={location.Image}
-										alt={location.Image}
-										className="w-full"
-									></img>
-									<span className="flex justify-between mx-5 mt-5 font-semibold">
-										<p className="hover:underline">{location.Name}</p>
-										<img
-											alt="delete"
-											srcSet="/Delete.png 1x"
-											className="cursor-pointer"
-										></img>
-									</span>
-									<p className="mx-5 mt-2 font-light text-[14px]">
-										{location.Province}, {location.Country}
-									</p>
-								</a>
+								<LocationItem location={location}></LocationItem>
 							))}
 						</div>
 					</div>
-
-					<div className="col-span-5 bg-slate-500">
-						<div className="absolute top-5 right-5 p-5 bg-white text-[14px] w-60 rounded-sm drop-shadow-md">
-							<p className="mb-4">Tìm địa điểm</p>
-							<input
-								className="block w-full px-3 py-1 bg-white border rounded-md shadow-sm placeholder:text-slate-400 border-slate-300 focus:outline-none focus:border-slate-500"
-								type="text"
-								name="name"
-								placeholder="Tìm kiếm địa điểm"
+					<div className="col-span-6">
+						<SearchBar></SearchBar>
+						{coords && (
+							<Map
+								setBounds={setBounds}
+								setCoords={setCoords}
+								coords={coords}
+								// places={filteredPlaces.length ? filteredPlaces : places}
 							/>
-						</div>
+						)}
 					</div>
 					{isOpen && (
 						<EditTour
@@ -110,7 +113,7 @@ const TourDetails = () => {
 					)}
 				</div>
 			</div>
-		</Layout>
+		</>
 	);
 };
 
