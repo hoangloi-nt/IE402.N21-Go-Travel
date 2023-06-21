@@ -1,30 +1,193 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "components/layout/Layout";
 import Tour from "components/tour";
+import { Controller, useForm } from "react-hook-form";
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  query,
+  serverTimestamp,
+} from "firebase/firestore";
+import { toast } from "react-toastify";
+import { db } from "../../src/firebase/firebase-config";
 
 const ManageTour = () => {
-	return (
-		<Layout>
-			<div className="bg-white max-w-[1440px] px-[113px] mx-auto mb-[227px]">
-				<h1 className="pt-10 mx-auto text-2xl font-bold text-center e mb-[106px]">
-					Quản lý thông tin chuyến đi
-				</h1>
-				<div className="flex items-center justify-between mb-[43px]">
-					<div className="text-[20px] leading-[23px] text-[#6557B9]">
-						DANH SÁCH CHUYẾN ĐI HIỆN TẠI CỦA BẠN
-					</div>
-					<button className="py-[16px] px-[16px] text-white bg-[#6557B9] rounded font-semibold text-[16px] hover:opacity-60">
-						Thêm chuyến đi
-					</button>
-				</div>
-				<div className="flex flex-col items-center gap-[50px]">
-					<Tour></Tour>
-					<Tour></Tour>
-					<Tour></Tour>
-				</div>
-			</div>
-		</Layout>
-	);
+  const [openModal, setOpenModal] = useState(false);
+  const [trips, setTrips] = useState([]);
+
+  const { control, handleSubmit, reset } = useForm({
+    mode: "onChange",
+    defaultValues: {
+      title: "",
+      image: "",
+      begin_location: "",
+      start_day: "",
+      end_day: "",
+    },
+  });
+
+  //   Chức năng POST trip lên Firebase
+  const addTrip = async (values) => {
+    console.log(values);
+    try {
+      const colRef = collection(db, "trips");
+      await addDoc(colRef, {
+        ...values,
+        createdAt: serverTimestamp(),
+      });
+      toast.success("Tạo chuyến đi mới thành công!");
+      reset({
+        title: "",
+        image: "",
+        begin_location: "",
+        start_day: "",
+        end_day: "",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //   Gọi tất cả trips ra và lưu và trips
+  useEffect(() => {
+    const colRef = query(collection(db, "trips"));
+    onSnapshot(colRef, (snapshot) => {
+      const results = [];
+      snapshot.forEach((doc) => {
+        results.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+      setTrips(results);
+    });
+  }, []);
+
+  return (
+    <Layout>
+      <div className="bg-white max-w-[1440px] px-[113px] mx-auto mb-[227px]">
+        <h1 className="pt-10 mx-auto text-2xl font-bold text-center mb-[106px]">
+          Quản lý thông tin chuyến đi
+        </h1>
+        <div className="flex items-center justify-between mb-[43px]">
+          <div className="text-[20px] leading-[23px] text-[#6557B9]">
+            DANH SÁCH CHUYẾN ĐI HIỆN TẠI CỦA BẠN
+          </div>
+          <button
+            className="py-[16px] px-[16px] text-white bg-[#6557B9] rounded font-semibold text-[16px] hover:opacity-60"
+            onClick={() => setOpenModal(!openModal)}
+          >
+            Thêm chuyến đi
+          </button>
+        </div>
+        <div className="flex flex-col items-center gap-[50px]">
+          {trips.length > 0 &&
+            trips.map((item) => (
+              <Tour
+                id={item?.id}
+                title={item?.title}
+                imageUrl={item.image}
+                beginLocation={item?.begin_location}
+                startDay={item?.start_day}
+                endDay={item?.end_day}
+              ></Tour>
+            ))}
+        </div>
+      </div>
+
+      {openModal && (
+        <div
+          className="fixed inset-0 z-10 bg-black bg-opacity-50"
+          onClick={() => setOpenModal(!openModal)}
+        >
+          <div
+            className="absolute z-20 px-5 py-6 -translate-x-1/2 -translate-y-1/2 bg-white rounded shadow-md left-1/2 top-1/2"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <form onSubmit={handleSubmit(addTrip)}>
+              <h2 className="mb-10 text-xl font-semibold text-center">
+                THÊM CHUYẾN ĐI
+              </h2>
+              <div className="flex items-center justify-center mb-5">
+                <Controller
+                  control={control}
+                  name="title"
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      placeholder="Nhập tên chuyến đi"
+                      type="text"
+                      className="w-[380px]"
+                    />
+                  )}
+                />
+              </div>
+              <div className="flex items-center justify-center mb-5">
+                <Controller
+                  control={control}
+                  name="begin_location"
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      placeholder="Nhập địa điểm khởi hành"
+                      type="text"
+                      className="w-[380px]"
+                    />
+                  )}
+                />
+              </div>
+              <div className="flex items-center justify-center mb-5">
+                <Controller
+                  control={control}
+                  name="image"
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      placeholder="Nhập url hình ảnh"
+                      type="text"
+                      className="w-[380px]"
+                    />
+                  )}
+                />
+              </div>
+              <div className="flex items-center justify-between mb-5 gap-x-5">
+                <label htmlFor="start_day">Thời gian bắt đầu</label>
+                <Controller
+                  control={control}
+                  name="start_day"
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      id="start_day"
+                      type="date"
+                      name="start_day"
+                    />
+                  )}
+                />
+              </div>
+              <div className="flex items-center justify-between mb-8 gap-x-4">
+                <label htmlFor="end_day">Thời gian kết thúc</label>
+                <Controller
+                  control={control}
+                  name="end_day"
+                  render={({ field }) => (
+                    <input {...field} id="end_day" type="date" name="end_day" />
+                  )}
+                />
+              </div>
+              <button
+                type="submit"
+                className="block px-4 py-3 mx-auto text-white transition-all rounded-md bg-purple-1 hover:opacity-70"
+              >
+                Thêm
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+    </Layout>
+  );
 };
 
 export default ManageTour;
