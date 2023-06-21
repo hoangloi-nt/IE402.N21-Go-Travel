@@ -1,17 +1,15 @@
 import axios from "axios";
 
-export const getPlacesData = async (sw, ne, type) => {
+export const searchPlacesData = async ({ query }) => {
 	try {
 		const {
 			data: { data },
 		} = await axios.get(
-			`https://travel-advisor.p.rapidapi.com/${type}/list-in-boundary`,
+			`https://travel-advisor.p.rapidapi.com/locations/auto-complete`,
 			{
 				params: {
-					bl_latitude: sw.lat,
-					bl_longitude: sw.lng,
-					tr_longitude: ne.lng,
-					tr_latitude: ne.lat,
+					query: query,
+					limit: "6",
 				},
 				headers: {
 					"x-rapidapi-key":

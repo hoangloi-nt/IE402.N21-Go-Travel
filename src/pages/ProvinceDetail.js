@@ -52,7 +52,6 @@ const ProvinceDetail = () => {
 		const lng = autocomplete.getPlace().geometry.location.lng();
 
 		setCoords({ lat, lng });
-		console.log(autocomplete.getPlace().geometry);
 	};
 	return (
 		<>
@@ -95,6 +94,7 @@ const ProvinceDetail = () => {
 								setCoords={setCoords}
 								coords={coords}
 								places={filteredPlaces?.length ? filteredPlaces : places}
+								autocomplete={autocomplete}
 							/>
 						)}
 					</div>

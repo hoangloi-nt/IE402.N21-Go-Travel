@@ -1,11 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import GoogleMapReact from "google-map-react";
 
 import mapStyles from "../../mapStyles";
 import useStyles from "./styles.js";
 import PlaceChild from "components/PlaceChild/PlaceChild";
-const Map = ({ coords, places, setCoords, setBounds, setChildClicked }) => {
+
+const Map = ({
+	coords,
+	places,
+	setCoords,
+	setBounds,
+	setChildClicked,
+	autocomplete,
+}) => {
 	const classes = useStyles();
+
+	const [location, setLocation] = useState({
+		lat: coords.lat,
+		lng: coords.lng,
+	});
 
 	return (
 		<div className={classes.mapContainer}>
@@ -41,6 +54,21 @@ const Map = ({ coords, places, setCoords, setBounds, setChildClicked }) => {
 								</div>
 							),
 					)}
+
+				{location && (
+					<div
+						className={`z-[1000] ${classes.markerContainer}`}
+						lat={location.lat}
+						lng={location.lng}
+					>
+						<img
+							src="./images/location-icon.png"
+							className="w-[30px] h-[30px] z-[300]"
+							alt=""
+							title="Your Location"
+						/>
+					</div>
+				)}
 			</GoogleMapReact>
 		</div>
 	);
