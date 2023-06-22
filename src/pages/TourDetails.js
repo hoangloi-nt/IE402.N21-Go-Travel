@@ -44,8 +44,9 @@ const Locations = [
 
 const TourDetails = () => {
 	const [place, setPlace] = useState();
-	const [coords, setCoords] = useState({});
+	const [coords, setCoords] = useState();
 	const [bounds, setBounds] = useState(null);
+	const [selectMore, setSelectMore] = useState();
 	useEffect(() => {
 		navigator.geolocation.getCurrentPosition(
 			({ coords: { latitude, longitude } }) => {
@@ -88,7 +89,11 @@ const TourDetails = () => {
 						</p>
 						<div className="flex flex-col">
 							{Locations.map((location, index) => (
-								<LocationItem location={location}></LocationItem>
+								<LocationItem
+									key={index}
+									setSelectMore={setSelectMore}
+									location={location}
+								></LocationItem>
 							))}
 						</div>
 					</div>

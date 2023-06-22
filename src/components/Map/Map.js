@@ -19,7 +19,7 @@ const Map = ({
 		lat: coords.lat,
 		lng: coords.lng,
 	});
-
+	console.log(location);
 	return (
 		<div className={classes.mapContainer}>
 			<GoogleMapReact
