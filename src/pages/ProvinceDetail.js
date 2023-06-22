@@ -94,7 +94,6 @@ const ProvinceDetail = () => {
 								setCoords={setCoords}
 								coords={coords}
 								places={filteredPlaces?.length ? filteredPlaces : places}
-								autocomplete={autocomplete}
 							/>
 						)}
 					</div>

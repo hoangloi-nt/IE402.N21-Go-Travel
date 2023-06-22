@@ -15,7 +15,11 @@ const PlaceChild = ({ place }) => {
 					alt="hello"
 					className="object-cover w-full aspect-square mb-[3px]"
 					src={
-						place.photo ? place.photo.images.large.url : "/images/no-image.png"
+						place.photo
+							? place.photo.images.large.url
+							: place.image
+							? place.image
+							: "/images/no-image.png"
 					}
 				/>
 				<Rating

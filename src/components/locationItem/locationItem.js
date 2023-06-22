@@ -1,13 +1,64 @@
 import React, { useState, useEffect, useRef } from "react";
+import { db } from "../../firebase/firebase-config";
+import { doc, updateDoc } from "firebase/firestore";
 import Rating from "@material-ui/lab/Rating";
-import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-const LocationItem = ({ location, setSelectMore }) => {
+import { useParams } from "react-router-dom";
+const LocationItem = ({
+	location,
+	selected,
+	refProp,
+	index,
+	places,
+	setPlaces,
+}) => {
 	const [isMore, setIsMore] = useState(false);
 	const moreRef = useRef(null);
+	if (selected) {
+		refProp?.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+	}
+	useEffect(() => {
+		const onScroll = () => {
+			setIsMore(false);
+		};
+		window.addEventListener("scroll", onScroll);
+		return () => {
+			window.removeEventListener("scroll", onScroll);
+		};
+	}, [isMore]);
+	const array_move = (arr, old_index, new_index) => {
+		if (new_index >= arr.length) {
+			var k = new_index - arr.length + 1;
+			while (k--) {
+				arr.push(undefined);
+			}
+		}
+		arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+		return arr; // for testing
+	};
+	const moveUp = async () => {
+		const newPlaces = array_move(places, index, index - 1);
+		const colRef = doc(db, "trips", id);
+		await updateDoc(colRef, {
+			tripDetails: newPlaces,
+		});
+		setPlaces([...newPlaces]);
+		setIsMore(false);
+	};
+	const moveDown = async () => {
+		const newPlaces = array_move(places, index, index + 1);
+		const colRef = doc(db, "trips", id);
+		await updateDoc(colRef, {
+			tripDetails: newPlaces,
+		});
+		setPlaces([...newPlaces]);
+		setIsMore(false);
+	};
+	// returns [2, 1, 3]
 
-	const handleDeleteTrip = async (docId) => {
-		// const colRef = doc(db, "trips", docId);
+	const { id } = useParams();
+	const handleDeleteTrip = async () => {
+		places.splice(index, 1);
 		Swal.fire({
 			title: "Bạn có muốn xóa?",
 			icon: "warning",
@@ -18,14 +69,19 @@ const LocationItem = ({ location, setSelectMore }) => {
 			confirmButtonText: "Có",
 		}).then(async (result) => {
 			if (result.isConfirmed) {
-				// await deleteDoc(colRef);
+				const colRef = doc(db, "trips", id);
+				await updateDoc(colRef, {
+					tripDetails: places,
+				});
+				setPlaces([...places]);
+				setIsMore(false);
 				Swal.fire("Đã xóa!");
 			}
 		});
 	};
 
 	return (
-		<a className="mb-7" href="/province-detail">
+		<a className="block mb-7" href="/province-detail">
 			<img
 				src={location?.image}
 				alt={location?.image}
@@ -62,13 +118,17 @@ const LocationItem = ({ location, setSelectMore }) => {
 				</div>
 
 				<div
-					className="cursor-pointer py-[25px] px-[30px] h-[40px]"
+					className="cursor-pointer py-[25px] px-[30px]"
 					onClick={(e) => {
 						e.preventDefault();
 						setIsMore(!isMore);
 					}}
 				>
-					<img alt="see more" src="/images/see-more.svg"></img>
+					<img
+						alt="see more"
+						src="/images/see-more.svg"
+						className="min-w-[20px]"
+					></img>
 				</div>
 				{/* Modal See more */}
 				{isMore && (
@@ -85,10 +145,20 @@ const LocationItem = ({ location, setSelectMore }) => {
 							ref={moreRef}
 							onClick={(e) => e.preventDefault()}
 						>
-							<p className="px-[24px] font-normal py-[8px] text-[14px]">
+							<p
+								className={`px-[24px] font-normal py-[8px] text-[14px] ${
+									index === 0
+										? "pointer-events-none disabled text-[#ccc] cursor-none"
+										: ""
+								}`}
+								onClick={() => moveUp()}
+							>
 								Move up
 							</p>
-							<p className="px-[24px] font-normal py-[8px] text-[14px]">
+							<p
+								className="px-[24px] font-normal py-[8px] text-[14px]"
+								onClick={() => moveDown()}
+							>
 								Move down
 							</p>
 							<p

@@ -5,14 +5,7 @@ import mapStyles from "../../mapStyles";
 import useStyles from "./styles.js";
 import PlaceChild from "components/PlaceChild/PlaceChild";
 
-const Map = ({
-	coords,
-	places,
-	setCoords,
-	setBounds,
-	setChildClicked,
-	autocomplete,
-}) => {
+const Map = ({ coords, places, setCoords, setBounds, setChildClicked }) => {
 	const classes = useStyles();
 
 	const [location, setLocation] = useState({

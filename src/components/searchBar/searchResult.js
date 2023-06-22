@@ -11,7 +11,6 @@ const SearchResult = ({ place, type, places, setPlaces }) => {
 	}
 	const handleUpdate = async () => {
 		const tripAdd = {
-			STT: places.length + 1 || "",
 			location_id: place.location_id || "",
 			latitude: place.latitude || "",
 			longitude: place.longitude || "",
