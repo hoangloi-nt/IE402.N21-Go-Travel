@@ -1,8 +1,43 @@
 import React from "react";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { db } from "../../firebase/firebase-config";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+const SearchResult = ({ place, type, places, setPlaces }) => {
+	const { id } = useParams();
+	let selected = false;
+	if (places.some((e) => e.location_id === place.location_id)) {
+		selected = true;
+	}
+	const handleUpdate = async () => {
+		const tripAdd = {
+			STT: places.length + 1 || "",
+			location_id: place.location_id || "",
+			latitude: place.latitude || "",
+			longitude: place.longitude || "",
+			name: place.name || "",
+			location_string: place.location_string || "",
+			address: place.address || "",
+			rating: place.rating || "",
+			num_reviews: place.num_reviews || "",
+			type: type || "",
+			image: place?.photo.images.large.url || "",
+		};
 
-const SearchResult = ({ place, type, selected }) => {
+		setPlaces([...places, tripAdd]);
+		console.log(places);
+		const colRef = doc(db, "trips", id);
+		await updateDoc(colRef, {
+			tripDetails: [...places, tripAdd],
+		});
+		toast.success("Đã thêm vào chuyến đi!");
+	};
+
 	return (
-		<div className="flex items-center justify-between cursor-pointer group">
+		<div
+			className="flex items-center justify-between cursor-pointer group"
+			onClick={() => handleUpdate()}
+		>
 			<div className="group-hover:pl-[2px] flex gap-[12px] py-[16px] mr-[12px]">
 				{type === "restaurants" ? (
 					<img
@@ -13,6 +48,12 @@ const SearchResult = ({ place, type, selected }) => {
 				) : type === "things_to_do" ? (
 					<img
 						src="/images/ticket.svg"
+						alt=""
+						className="mt-[2.5px] min-w-[12px] h-[12px]"
+					/>
+				) : type === "lodging" ? (
+					<img
+						src="/images/bed.svg"
 						alt=""
 						className="mt-[2.5px] min-w-[12px] h-[12px]"
 					/>

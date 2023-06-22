@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import Map from "components/Map/Map";
 import { useState } from "react";
-import EditTour from "components/EditTour";
-import { searchPlacesData } from "api/searchLocationAPI";
-
+import { db } from "../firebase/firebase-config";
+import { deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
 import Header from "components/layout/Header";
 import SearchBar from "components/searchBar/searchBar";
 import LocationItem from "components/locationItem/locationItem";
+import { useParams } from "react-router-dom";
 
 const FakeTour = {
 	Name: "Tour cuối năm",
@@ -15,38 +15,13 @@ const FakeTour = {
 	Year: 2023,
 };
 
-const Locations = [
-	{
-		id: 1,
-		name: "Nha Trang",
-		image: "/NhaTrang.jpg",
-		province: "Khánh Hòa",
-		country: "Việt Nam",
-		description: "Vùng biển đẹp",
-	},
-	{
-		id: 2,
-		name: "Đà Lạt",
-		image: "/DaLat.jpg",
-		province: "Lâm Đồng",
-		country: "Việt Nam",
-		description: "Vùng núi đẹp",
-	},
-	{
-		id: 3,
-		name: "Hồ Chí Minh",
-		image: "/HCM.jpg",
-		province: "Hồ Chí Minh",
-		country: "Việt Nam",
-		description: "Vùng đô thị",
-	},
-];
-
 const TourDetails = () => {
-	const [place, setPlace] = useState();
+	const { id } = useParams();
+	const [places, setPlaces] = useState();
+	const [data, setData] = useState();
+
 	const [coords, setCoords] = useState();
 	const [bounds, setBounds] = useState(null);
-	const [selectMore, setSelectMore] = useState();
 	useEffect(() => {
 		navigator.geolocation.getCurrentPosition(
 			({ coords: { latitude, longitude } }) => {
@@ -55,11 +30,15 @@ const TourDetails = () => {
 		);
 	}, []);
 	useEffect(() => {
-		// searchPlacesData({ query: "pattery" }).then((data) => {
-		// 	console.log(data);
-		// 	setPlace(data);
-		// });
-	}, [coords, bounds]);
+		async function fetchData() {
+			const colRef = doc(db, "trips", id);
+			const singleDoc = await getDoc(colRef);
+			setData(singleDoc.data());
+			setPlaces(singleDoc.data().tripDetails);
+		}
+		fetchData();
+	}, [id]);
+
 	const [isOpen, setIsOpen] = useState(false);
 
 	const openModal = () => {
@@ -69,6 +48,7 @@ const TourDetails = () => {
 	const closeModal = () => {
 		setIsOpen(false);
 	};
+	// console.log(data);
 	return (
 		<>
 			<Header />
@@ -76,46 +56,37 @@ const TourDetails = () => {
 				<div className="relative grid grid-cols-8">
 					<div className="max-h-[calc(100vh-90px)] col-span-2 overflow-y-scroll shadow-2xl no-scrollbar">
 						<span className="flex justify-between mx-5 mt-5">
-							<h5 className="font-medium drop-shadow-md">Tên chuyến đi</h5>
+							<h5 className="font-semibold drop-shadow-md text-[24px]">
+								{data?.title}
+							</h5>
 						</span>
 						<p
 							className="mt-3 mx-5 font-light text-[14px] cursor-pointer hover:underline"
 							onClick={openModal}
 						>
-							+Thêm mô tả
+							Mô tả:
 						</p>
 						<p className="mt-3 mx-5 mb-5 font-light text-[14px]">
-							Cập nhật tháng {FakeTour.Month} năm {FakeTour.Year}
+							{places?.length} địa điểm, cập nhật lúc {FakeTour.Month}/
+							{FakeTour.Year}
 						</p>
 						<div className="flex flex-col">
-							{Locations.map((location, index) => (
-								<LocationItem
-									key={index}
-									setSelectMore={setSelectMore}
-									location={location}
-								></LocationItem>
+							{places?.map((place, index) => (
+								<LocationItem key={index} location={place}></LocationItem>
 							))}
 						</div>
 					</div>
 					<div className="col-span-6">
-						<SearchBar></SearchBar>
+						<SearchBar setPlaces={setPlaces} places={places}></SearchBar>
 						{coords && (
 							<Map
 								setBounds={setBounds}
 								setCoords={setCoords}
 								coords={coords}
-								// places={filteredPlaces.length ? filteredPlaces : places}
+								places={places}
 							/>
 						)}
 					</div>
-					{isOpen && (
-						<EditTour
-							close={closeModal}
-							image={Locations[0].Image}
-							name={FakeTour.Name}
-							description={FakeTour.Description}
-						></EditTour>
-					)}
 				</div>
 			</div>
 		</>

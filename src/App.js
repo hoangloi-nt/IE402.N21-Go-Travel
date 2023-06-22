@@ -14,16 +14,13 @@ function App() {
 		<Suspense>
 			<Routes>
 				<Route path="/" element={<HomePage></HomePage>} />
-				<Route path="/tour-detail" element={<TourDetails></TourDetails>} />
+				<Route path="/tour-detail/:id" element={<TourDetails></TourDetails>} />
 				<Route path="/manage-tour" element={<ManageTour></ManageTour>} />
 				<Route
 					path="/famous-site"
 					element={<FamousSitePage></FamousSitePage>}
 				/>
-				<Route
-					path="/famous-site"
-					element={<FamousSitePage></FamousSitePage>}
-				/>
+
 				<Route path="/signin" element={<SigninPage></SigninPage>} />
 				<Route path="/register" element={<RegisterPage></RegisterPage>} />
 				<Route path="/chitiet" element={<ChiTietDiaDiem></ChiTietDiaDiem>} />

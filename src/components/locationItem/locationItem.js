@@ -1,29 +1,64 @@
 import React, { useState, useEffect, useRef } from "react";
 import Rating from "@material-ui/lab/Rating";
-
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 const LocationItem = ({ location, setSelectMore }) => {
 	const [isMore, setIsMore] = useState(false);
 	const moreRef = useRef(null);
-	// useEffect(() => {
-	// 	const handleClickOutside = (e) => {
-	// 		if (moreRef.current && !moreRef.current.contains(e.target)) {
-	// 			setIsMore(false);
-	// 		}
-	// 	};
-	// 	document.addEventListener("mousedown", handleClickOutside);
-	// 	return () => {
-	// 		document.removeEventListener("mousedown", handleClickOutside);
-	// 	};
-	// }, [moreRef]);
+
+	const handleDeleteTrip = async (docId) => {
+		// const colRef = doc(db, "trips", docId);
+		Swal.fire({
+			title: "Bạn có muốn xóa?",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			cancelButtonText: "Không",
+			confirmButtonText: "Có",
+		}).then(async (result) => {
+			if (result.isConfirmed) {
+				// await deleteDoc(colRef);
+				Swal.fire("Đã xóa!");
+			}
+		});
+	};
+
 	return (
 		<a className="mb-7" href="/province-detail">
-			<img src={location?.image} alt={location?.image} className="w-full"></img>
-			<div className="relative flex justify-between ml-5 font-semibold ">
-				<div className="my-5">
-					<p className="hover:underline">{location?.name}</p>
-					<p className="mt-2 font-light text-[14px]">
-						{location?.province}, {location.country}
-					</p>
+			<img
+				src={location?.image}
+				alt={location?.image}
+				className="w-full h-[200px] object-cover"
+			></img>
+			<div className="relative flex justify-between ml-5">
+				<div className="mt-5">
+					<p className="font-semibold text-[16px]">{location?.name}</p>
+
+					{location.location_string !== "" ? (
+						<p className="mt-1 text-[14px]">{location?.location_string}</p>
+					) : (
+						<></>
+					)}
+					{location.address !== "" ? (
+						<p className="mt-2 text-[14px]">Địa chỉ: {location.address}</p>
+					) : (
+						<></>
+					)}
+
+					{location.location_string !== "" ? (
+						<div className="flex items-center mt-2 text-[12px] gap-[10px]">
+							<Rating
+								name="read-only"
+								size="small"
+								value={Number(location?.rating)}
+								readOnly
+							/>
+							<p className="font-medium">{location?.num_reviews}</p>
+						</div>
+					) : (
+						<></>
+					)}
 				</div>
 
 				<div
@@ -56,7 +91,10 @@ const LocationItem = ({ location, setSelectMore }) => {
 							<p className="px-[24px] font-normal py-[8px] text-[14px]">
 								Move down
 							</p>
-							<p className="px-[24px] font-normal py-[8px] text-[14px]">
+							<p
+								className="px-[24px] font-normal py-[8px] text-[14px]"
+								onClick={() => handleDeleteTrip()}
+							>
 								Remove from trip
 							</p>
 						</div>
