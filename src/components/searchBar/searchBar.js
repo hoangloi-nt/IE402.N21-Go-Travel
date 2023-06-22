@@ -4,7 +4,7 @@ import SearchResult from "./searchResult";
 import { useEffect } from "react";
 import { searchPlacesData } from "api/searchLocationAPI";
 import { CircularProgress, setRef } from "@material-ui/core";
-const SearchBar = () => {
+const SearchBar = ({ places, setPlaces }) => {
 	const searchBarRef = useRef(null);
 	const [searchResults, setSearchResults] = useState();
 	const [value, setValue] = useState();
@@ -61,6 +61,8 @@ const SearchBar = () => {
 				) : (
 					searchResults?.map((result) => (
 						<SearchResult
+							setPlaces={setPlaces}
+							places={places}
 							place={result.result_object}
 							type={result.result_type}
 						/>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import GoogleMapReact from "google-map-react";
-
+import locationNow from "../../assets/locationNow.svg";
 import mapStyles from "../../mapStyles";
 import useStyles from "./styles.js";
 import PlaceChild from "components/PlaceChild/PlaceChild";
@@ -62,7 +62,7 @@ const Map = ({
 						lng={location.lng}
 					>
 						<img
-							src="./images/location-icon.png"
+							src={locationNow}
 							className="w-[30px] h-[30px] z-[300]"
 							alt=""
 							title="Your Location"
