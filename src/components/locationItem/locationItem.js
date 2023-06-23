@@ -4,28 +4,16 @@ import { doc, updateDoc } from "firebase/firestore";
 import Rating from "@material-ui/lab/Rating";
 import Swal from "sweetalert2";
 import { useParams } from "react-router-dom";
-const LocationItem = ({
-	location,
-	selected,
-	refProp,
-	index,
-	places,
-	setPlaces,
-}) => {
+const LocationItem = ({ location, index, places, setPlaces, getDate }) => {
 	const [isMore, setIsMore] = useState(false);
-	const moreRef = useRef(null);
-	if (selected) {
-		refProp?.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-	}
+
 	useEffect(() => {
 		const onScroll = () => {
 			setIsMore(false);
 		};
 		window.addEventListener("scroll", onScroll);
-		return () => {
-			window.removeEventListener("scroll", onScroll);
-		};
 	}, [isMore]);
+
 	const array_move = (arr, old_index, new_index) => {
 		if (new_index >= arr.length) {
 			var k = new_index - arr.length + 1;
@@ -38,8 +26,10 @@ const LocationItem = ({
 	};
 	const moveUp = async () => {
 		const newPlaces = array_move(places, index, index - 1);
+
 		const colRef = doc(db, "trips", id);
 		await updateDoc(colRef, {
+			lastUpdateTime: getDate(),
 			tripDetails: newPlaces,
 		});
 		setPlaces([...newPlaces]);
@@ -49,12 +39,12 @@ const LocationItem = ({
 		const newPlaces = array_move(places, index, index + 1);
 		const colRef = doc(db, "trips", id);
 		await updateDoc(colRef, {
+			lastUpdateTime: getDate(),
 			tripDetails: newPlaces,
 		});
 		setPlaces([...newPlaces]);
 		setIsMore(false);
 	};
-	// returns [2, 1, 3]
 
 	const { id } = useParams();
 	const handleDeleteTrip = async () => {
@@ -71,6 +61,7 @@ const LocationItem = ({
 			if (result.isConfirmed) {
 				const colRef = doc(db, "trips", id);
 				await updateDoc(colRef, {
+					lastUpdateTime: getDate(),
 					tripDetails: places,
 				});
 				setPlaces([...places]);
@@ -102,7 +93,7 @@ const LocationItem = ({
 						<></>
 					)}
 
-					{location.location_string !== "" ? (
+					{location.num_reviews !== "" ? (
 						<div className="flex items-center mt-2 text-[12px] gap-[10px]">
 							<Rating
 								name="read-only"
@@ -133,16 +124,15 @@ const LocationItem = ({
 				{/* Modal See more */}
 				{isMore && (
 					<>
-						<div
+						{/* <div
 							className="fixed top-0 bottom-0 left-0 right-0 z-[5] cursor-default"
 							onClick={(e) => {
 								e.preventDefault();
 								setIsMore(!isMore);
 							}}
-						></div>
+						></div> */}
 						<div
 							className="see-more-location absolute py-[10px] right-[13px] top-[45px] bg-white shadow-2xl z-[6]"
-							ref={moreRef}
 							onClick={(e) => e.preventDefault()}
 						>
 							<p
@@ -156,7 +146,11 @@ const LocationItem = ({
 								Move up
 							</p>
 							<p
-								className="px-[24px] font-normal py-[8px] text-[14px]"
+								className={`px-[24px] font-normal py-[8px] text-[14px] ${
+									index === places.length
+										? "pointer-events-none disabled text-[#ccc] cursor-none"
+										: ""
+								}`}
 								onClick={() => moveDown()}
 							>
 								Move down

@@ -5,7 +5,7 @@ export const searchPlacesData = async ({ query }) => {
 		const {
 			data: { data },
 		} = await axios.get(
-			`https://travel-advisor.p.rapidapi.com/locations/search`,
+			`https://travel-advisor.p.rapidapi.com/locations/auto-complete`,
 			{
 				params: {
 					query: query,

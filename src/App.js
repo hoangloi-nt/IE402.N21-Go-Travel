@@ -25,7 +25,7 @@ function App() {
 				<Route path="/register" element={<RegisterPage></RegisterPage>} />
 				<Route path="/chitiet" element={<ChiTietDiaDiem></ChiTietDiaDiem>} />
 				<Route
-					path="/province-detail"
+					path="/province-detail/:id"
 					element={<ProvinceDetail></ProvinceDetail>}
 				/>
 			</Routes>

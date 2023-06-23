@@ -4,10 +4,10 @@ import locationNow from "../../assets/locationNow.svg";
 import mapStyles from "../../mapStyles";
 import useStyles from "./styles.js";
 import PlaceChild from "components/PlaceChild/PlaceChild";
-
+import { DirectionsRenderer } from "@react-google-maps/api";
 const Map = ({ coords, places, setCoords, setBounds, setChildClicked }) => {
 	const classes = useStyles();
-
+	const [directionsResponse, setDirectionsResponse] = useState(null);
 	const [location, setLocation] = useState({
 		lat: coords.lat,
 		lng: coords.lng,
@@ -22,15 +22,17 @@ const Map = ({ coords, places, setCoords, setBounds, setChildClicked }) => {
 				defaultZoom={14}
 				margin={[50, 50, 50, 50]}
 				options={{
-					disableDefaultUI: true,
+					// disableDefaultUI: true,
 					zoomControl: true,
 					styles: mapStyles,
+					streetView: true,
 				}}
 				onChange={(e) => {
 					setCoords({ lat: e.center.lat, lng: e.center.lng });
 					setBounds({ ne: e.marginBounds.ne, sw: e.marginBounds.sw });
 				}}
 				onChildClick={(child) => setChildClicked(child)}
+				// onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
 			>
 				{places?.length &&
 					places.map(
@@ -47,7 +49,6 @@ const Map = ({ coords, places, setCoords, setBounds, setChildClicked }) => {
 								</div>
 							),
 					)}
-
 				{location && (
 					<div
 						className={`z-[1000] ${classes.markerContainer}`}

@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { db } from "../../firebase/firebase-config";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 const SearchResult = ({ place, type, places, setPlaces }) => {
 	const { id } = useParams();
 	let selected = false;
@@ -20,7 +20,7 @@ const SearchResult = ({ place, type, places, setPlaces }) => {
 			rating: place.rating || "",
 			num_reviews: place.num_reviews || "",
 			type: type || "",
-			image: place?.photo.images.large.url || "",
+			image: place?.photo.images.original.url || "",
 		};
 
 		setPlaces([...places, tripAdd]);
