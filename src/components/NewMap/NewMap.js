@@ -54,7 +54,6 @@ function NewMap({ places, setDistance, setDuration, coords }) {
 			calculateRoute(wayPoints);
 		}
 	}, [places]);
-
 	return (
 		<div className="relative w-full flex flex-col items-center  h-[calc(100vh-90px)]">
 			{/* Google Map Box */}
@@ -70,7 +69,7 @@ function NewMap({ places, setDistance, setDuration, coords }) {
 					fullscreenControl: false,
 				}}
 			>
-				{places?.length === 0 && <Marker position={yourLocation} />}
+				{places === undefined && <Marker position={yourLocation} />}
 				{directionsResponse && places?.length !== 0 && (
 					<DirectionsRenderer
 						directions={directionsResponse}

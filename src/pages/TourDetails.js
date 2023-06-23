@@ -37,7 +37,6 @@ const TourDetails = () => {
 		}
 		fetchData();
 	}, [id]);
-	console.log(distance);
 	const convertSecondToTime = (seconds) => {
 		const days = Math.floor(seconds / 86400);
 		const hours = Math.floor((seconds % 86400) / 3600);
@@ -62,7 +61,7 @@ const TourDetails = () => {
 		setLastUpdateTime(result);
 		return result;
 	};
-	console.log(places);
+	console.log("places:", places);
 	return (
 		<>
 			<Header />
@@ -92,17 +91,18 @@ const TourDetails = () => {
 							</span>
 						</p>
 						<div className="flex flex-col">
-							{places?.map((place, index) => (
-								<Grid key={index} item xs={12}>
-									<LocationItem
-										index={index}
-										places={places}
-										location={place}
-										setPlaces={setPlaces}
-										getDate={getDate}
-									></LocationItem>
-								</Grid>
-							))}
+							{places &&
+								places?.map((place, index) => (
+									<Grid key={index} item xs={12}>
+										<LocationItem
+											index={index}
+											places={places}
+											location={place}
+											setPlaces={setPlaces}
+											getDate={getDate}
+										></LocationItem>
+									</Grid>
+								))}
 						</div>
 					</div>
 					<div className="col-span-6">
