@@ -77,22 +77,28 @@ const LocationItem = ({ location, index, places, setPlaces, getDate }) => {
 	};
 	const navigate = useNavigate();
 	return (
-		<div
-			className="block mb-7"
-			onClick={() => {
-				setProvinceAtom({
-					lat: Number(location.latitude),
-					lng: Number(location.longitude),
-					name: location.name,
-				});
-
-				// navigate("/province-detail");
-			}}
-		>
+		<div className="relative block mb-7 group">
+			<div
+				className="absolute right-[10px] w-[30px] hidden items-center justify-center h-[30px] top-[10px] border-[1px] border-black bg-[rgba(255,255,255,0.7)] cursor-pointer group-hover:flex "
+				onClick={() => {
+					setProvinceAtom({
+						lat: Number(location.latitude),
+						lng: Number(location.longitude),
+						name: location.name,
+					});
+					navigate("/province-detail");
+				}}
+			>
+				<img
+					src="/images/arrow-xeo.svg"
+					alt=""
+					className="max-w-[20px] max-h-[20px]"
+				></img>
+			</div>
 			<img
 				src={location?.image}
 				alt={location?.image}
-				className="w-full h-[200px] object-cover"
+				className="w-full h-[200px] "
 			></img>
 			<div className="relative flex justify-between ml-5">
 				<div className="mt-5">
@@ -125,7 +131,7 @@ const LocationItem = ({ location, index, places, setPlaces, getDate }) => {
 				</div>
 
 				<div
-					className="cursor-pointer py-[25px] px-[30px]"
+					className="cursor-pointer py-[25px] px-[30px] z-[100]"
 					onClick={(e) => {
 						e.preventDefault();
 						setIsMore(!isMore);
