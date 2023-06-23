@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import Map from "components/Map/Map";
-import { Autocomplete } from "@react-google-maps/api";
+// import { Autocomplete } from "@react-google-maps/api";
 import { useState } from "react";
 import { getPlacesData } from "api";
 import List from "components/List/List";
 import Header from "components/layout/Header";
-import SearchIcon from "@material-ui/icons/Search";
 import { useAtomValue } from "jotai";
 import { provinceAtom } from "atom/provinceAtom";
 
@@ -50,14 +49,14 @@ const ProvinceDetail = () => {
 			});
 		}
 	}, [mounted, type]);
-	const onLoad = (autoC) => setAutocomplete(autoC);
+	// const onLoad = (autoC) => setAutocomplete(autoC);
 
-	const onPlaceChanged = () => {
-		const lat = autocomplete.getPlace().geometry.location.lat();
-		const lng = autocomplete.getPlace().geometry.location.lng();
+	// const onPlaceChanged = () => {
+	// 	const lat = autocomplete.getPlace().geometry.location.lat();
+	// 	const lng = autocomplete.getPlace().geometry.location.lng();
 
-		setCoords({ lat, lng });
-	};
+	// 	setCoords({ lat, lng });
+	// };
 	return (
 		<>
 			<Header />

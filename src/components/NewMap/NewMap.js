@@ -21,7 +21,7 @@ function NewMap({ places, setDistance, setDuration, coords }) {
 			},
 			// eslint-disable-next-line no-undef
 			waypoints: wayPoints,
-			optimizeWaypoints: true,
+
 			// eslint-disable-next-line no-undef
 			travelMode: google.maps.TravelMode.DRIVING,
 		});
@@ -51,6 +51,7 @@ function NewMap({ places, setDistance, setDuration, coords }) {
 						stopover: true,
 					});
 			});
+			console.log(wayPoints);
 			calculateRoute(wayPoints);
 		}
 	}, [places]);

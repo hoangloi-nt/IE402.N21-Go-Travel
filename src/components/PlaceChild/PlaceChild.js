@@ -9,7 +9,7 @@ const PlaceChild = ({ place }) => {
 				className="w-[30px] h-[30px] z-[300] block group-hover:hidden cursor-default"
 				alt=""
 			/>
-			<div className="p-[10px] w-[100px] shadow-sm rounded-[2px] bg-white hidden group-hover:block">
+			<div className="px-[8px] py-[3px] w-[80px] shadow-sm rounded-[2px] bg-white hidden group-hover:block">
 				<div className="mb-[3px] line-clamp-2">{place.name}</div>
 				<img
 					alt="hello"

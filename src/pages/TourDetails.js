@@ -65,24 +65,22 @@ const TourDetails = () => {
 			<div className="bg-white">
 				<div className="relative grid grid-cols-8">
 					<div className="max-h-[calc(100vh-90px)] col-span-2 overflow-y-scroll shadow-2xl no-scrollbar pb-[80px]">
-						<span className="font-smibold text-[24px] flex justify-between mx-5 mt-5">
+						<span className="font-semibold text-[24px] flex justify-between mx-5 mt-5">
 							{data?.title}
 						</span>
-						<p className="mt-3 mx-5  text-[14px] cursor-pointer hover:underline">
-							Mô tả:
-						</p>
+
 						<p className="mt-3 mx-5 mb-5 text-[14px]">
 							{places?.length} địa điểm, cập nhật lúc {lastUpdateTime}
 						</p>
 						<p className="mt-3 mx-5 mb-5 text-[14px]">
-							Quãng đường đi dự kiến:
+							Quãng đường đi dự kiến:{" "}
 							<span className="font-semibold">
 								{places?.length === 0 ? " 0 " : distance}
-							</span>
+							</span>{" "}
 							km
 						</p>
 						<p className="mt-3 mx-5 mb-5  text-[14px]">
-							Thời gian đi dự kiến:
+							Thời gian đi dự kiến:{" "}
 							<span className="font-semibold">
 								{places?.length === 0 ? " 0" : convertSecondToTime(duration)}
 							</span>
