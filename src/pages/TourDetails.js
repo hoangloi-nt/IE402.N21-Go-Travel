@@ -11,10 +11,10 @@ import { useParams } from "react-router-dom";
 import NewMap from "components/NewMap/NewMap";
 
 const FakeTour = {
-	Name: "Tour cuối năm",
-	Description: "Đi 2 người",
-	Month: 6,
-	Year: 2023,
+  Name: "Tour cuối năm",
+  Description: "Đi 2 người",
+  Month: 6,
+  Year: 2023,
 };
 
 const TourDetails = () => {

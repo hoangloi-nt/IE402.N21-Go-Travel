@@ -5,18 +5,25 @@ import { Controller, useForm } from "react-hook-form";
 import {
   addDoc,
   collection,
+  doc,
+  getDoc,
   onSnapshot,
   query,
   serverTimestamp,
+  where,
 } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { db } from "../../src/firebase/firebase-config";
+import { useAtomValue } from "jotai";
+import { userAtom } from "atom/userAtom";
 
 const ManageTour = () => {
   const [openModal, setOpenModal] = useState(false);
   const [trips, setTrips] = useState([]);
 
-  const { control, handleSubmit, reset } = useForm({
+  const userInfo = useAtomValue(userAtom);
+
+  const { control, handleSubmit, setValue, reset } = useForm({
     mode: "onChange",
     defaultValues: {
       title: "",
@@ -24,6 +31,7 @@ const ManageTour = () => {
       begin_location: "",
       start_day: "",
       end_day: "",
+      user: {},
     },
   });
 
@@ -36,6 +44,9 @@ const ManageTour = () => {
         ...values,
         createdAt: serverTimestamp(),
       });
+      console.log(trips, values);
+      // const addTrip = trips.push(values);
+      // setTrips([...addTrip]);
       toast.success("Tạo chuyến đi mới thành công!");
       reset({
         title: "",
@@ -43,26 +54,43 @@ const ManageTour = () => {
         begin_location: "",
         start_day: "",
         end_day: "",
+        user: {},
       });
     } catch (error) {
       console.log(error);
     }
   };
 
-  //   Gọi tất cả trips ra và lưu và trips
   useEffect(() => {
-    const colRef = query(collection(db, "trips"));
-    onSnapshot(colRef, (snapshot) => {
-      const results = [];
-      snapshot.forEach((doc) => {
-        results.push({
-          id: doc.id,
-          ...doc.data(),
-        });
+    if (!userInfo?.uid) return;
+    async function fetchUserData() {
+      const colRef = doc(db, "users", userInfo?.uid);
+      const docData = await getDoc(colRef);
+      setValue("user", {
+        id: docData?.id,
+        ...docData.data(),
       });
-      setTrips(results);
-    });
-  }, []);
+    }
+    fetchUserData();
+  }, [setValue, userInfo]);
+
+  //   Gọi tất cả trips của user hiện tại ra và lưu và trips
+  useEffect(() => {
+    if (userInfo?.uid) {
+      const colRef = collection(db, "trips");
+      const queries = query(colRef, where("user.email", "==", userInfo?.email));
+      onSnapshot(queries, (snapshot) => {
+        const result = [];
+        snapshot.forEach((item) =>
+          result.push({
+            id: item.id,
+            ...item.data(),
+          })
+        );
+        setTrips(result);
+      });
+    }
+  }, [userInfo]);
 
   return (
     <Layout>
@@ -82,9 +110,13 @@ const ManageTour = () => {
           </button>
         </div>
         <div className="flex flex-col items-center gap-[50px]">
+          {trips.length <= 0 && (
+            <h3 className="text-xl">Bạn chưa có chuyến đi nào</h3>
+          )}
           {trips.length > 0 &&
             trips.map((item) => (
               <Tour
+                key={item?.id}
                 id={item?.id}
                 title={item?.title}
                 imageUrl={item.image}

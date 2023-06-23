@@ -37,38 +37,18 @@ const HomePage = () => {
             className="top-0 left-0 object-cover w-full h-full"
           />
           <div className="absolute inset-0 flex flex-col items-center justify-center w-full h-full page-container mt-9">
-            <h1 className="text-white font-semibold text-[40px] mb-9">
+            <h1 className="mb-20 text-5xl font-semibold text-white">
               KHÁM PHÁ
             </h1>
-            <img src={bannerVN} alt="banner VN text" className="mb-[31px]" />
-            <p className="text-[20px] text-[#DCDCDC] font-medium mb-[104px]">
+            <img
+              src={bannerVN}
+              alt="banner VN text"
+              className="mb-5 w-[548px]"
+            />
+            <p className="text-2xl text-[#DCDCDC] font-medium mb-[104px]">
               "Khi đi du lịch, bạn không chỉ khám phá thế giới bên ngoài mà còn
               khám phá bản thân mình."
             </p>
-            <div className="px-[10px] py-3 bg-white rounded flex justify-center items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="#8F8D9B"
-                className="w-[33px] h-[33px] mr-[14px]"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-                />
-              </svg>
-              <input
-                type="text"
-                placeholder="Tìm kiếm chuyến đi"
-                className="text-base font-semibold w-[400px] mr-[14px]"
-              />
-              <button className="py-[10px] px-[14px] text-white bg-[#6557B9] rounded font-semibold text-[13px] hover:opacity-60">
-                Tìm kiếm
-              </button>
-            </div>
           </div>
         </div>
         <div className="page-container">
@@ -145,10 +125,13 @@ const HomePage = () => {
             {location?.map(
               (item) =>
                 item?.name && (
-                  <SwiperSlide key={item?.name}>
+                  <SwiperSlide key={`${item?.name} ${item?.location_id}`}>
                     <FamousSite
                       name={item?.name}
                       img={item?.photo?.images?.large?.url}
+                      url={item?.web_url}
+                      rating={item?.rating}
+                      review={item?.num_reviews}
                     ></FamousSite>
                   </SwiperSlide>
                 )
