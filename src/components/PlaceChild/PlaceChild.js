@@ -1,6 +1,6 @@
 import React from "react";
 import Rating from "@material-ui/lab/Rating";
-import locationNear from "../../assets/location-near.png";
+import locationNear from "../../assets/locationNear.svg";
 const PlaceChild = ({ place }) => {
 	return (
 		<div className="group">

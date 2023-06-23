@@ -4,15 +4,22 @@ import locationNow from "../../assets/locationNow.svg";
 import mapStyles from "../../mapStyles";
 import useStyles from "./styles.js";
 import PlaceChild from "components/PlaceChild/PlaceChild";
-import { DirectionsRenderer } from "@react-google-maps/api";
-const Map = ({ coords, places, setCoords, setBounds, setChildClicked }) => {
+import { useAtomValue } from "jotai";
+import { provinceAtom } from "atom/provinceAtom";
+const Map = ({
+	coords,
+	places,
+	setCoords,
+	setBounds,
+	setChildClicked,
+	setMoundted,
+}) => {
 	const classes = useStyles();
-	const [directionsResponse, setDirectionsResponse] = useState(null);
 	const [location, setLocation] = useState({
 		lat: coords.lat,
 		lng: coords.lng,
 	});
-
+	const provinceValue = useAtomValue(provinceAtom);
 	return (
 		<div className={classes.mapContainer}>
 			<GoogleMapReact
@@ -20,19 +27,20 @@ const Map = ({ coords, places, setCoords, setBounds, setChildClicked }) => {
 				defaultCenter={coords}
 				center={coords || { lat: 0, lng: 0 }}
 				defaultZoom={14}
-				margin={[50, 50, 50, 50]}
+				margin={[40, 40, 40, 40]}
 				options={{
 					// disableDefaultUI: true,
 					zoomControl: true,
 					styles: mapStyles,
 					streetView: true,
 				}}
+				onGoogleApiLoaded={(e) => console.log(e)}
 				onChange={(e) => {
-					setCoords({ lat: e.center.lat, lng: e.center.lng });
+					console.log(e);
+					setMoundted(true);
 					setBounds({ ne: e.marginBounds.ne, sw: e.marginBounds.sw });
 				}}
 				onChildClick={(child) => setChildClicked(child)}
-				// onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
 			>
 				{places?.length &&
 					places.map(
@@ -49,11 +57,11 @@ const Map = ({ coords, places, setCoords, setBounds, setChildClicked }) => {
 								</div>
 							),
 					)}
-				{location && (
+				{provinceValue && (
 					<div
 						className={`z-[1000] ${classes.markerContainer}`}
-						lat={location.lat}
-						lng={location.lng}
+						lat={provinceValue.lat}
+						lng={provinceValue.lng}
 					>
 						<img
 							src={locationNow}

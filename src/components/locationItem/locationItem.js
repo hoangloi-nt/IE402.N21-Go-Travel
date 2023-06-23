@@ -4,18 +4,22 @@ import { doc, updateDoc } from "firebase/firestore";
 import Rating from "@material-ui/lab/Rating";
 import Swal from "sweetalert2";
 import { useParams } from "react-router-dom";
+import { useSetAtom, useAtomValue } from "jotai";
+import { provinceAtom } from "atom/provinceAtom";
+import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const LocationItem = ({ location, index, places, setPlaces, getDate }) => {
 	const [isMore, setIsMore] = useState(false);
-
+	const setProvinceAtom = useSetAtom(provinceAtom);
+	const provinceValue = useAtomValue(provinceAtom);
+	console.log(provinceValue);
 	const overlayRef = useRef(null);
-
 	useEffect(() => {
 		const onScroll = () => {
 			setIsMore(false);
 		};
 		window.addEventListener("mousewheel", onScroll);
 	}, []);
-
 	const array_move = (arr, old_index, new_index) => {
 		if (new_index >= arr.length) {
 			var k = new_index - arr.length + 1;
@@ -47,7 +51,6 @@ const LocationItem = ({ location, index, places, setPlaces, getDate }) => {
 		setPlaces([...newPlaces]);
 		setIsMore(false);
 	};
-
 	const { id } = useParams();
 	const handleDeleteTrip = async () => {
 		places.splice(index, 1);
@@ -73,9 +76,21 @@ const LocationItem = ({ location, index, places, setPlaces, getDate }) => {
 			}
 		});
 	};
-
+	const navigate = useNavigate();
 	return (
-		<a className="block mb-7" href="/province-detail">
+		<div
+			// href="/province-detail"
+			className="block mb-7"
+			onClick={() => {
+				setProvinceAtom({
+					lat: Number(location.latitude),
+					lng: Number(location.longitude),
+					name: location.name,
+				});
+
+				navigate("/province-detail");
+			}}
+		>
 			<img
 				src={location?.image}
 				alt={location?.image}
@@ -169,7 +184,7 @@ const LocationItem = ({ location, index, places, setPlaces, getDate }) => {
 					</>
 				)}
 			</div>
-		</a>
+		</div>
 	);
 };
 

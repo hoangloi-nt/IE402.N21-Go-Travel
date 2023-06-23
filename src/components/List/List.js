@@ -12,6 +12,8 @@ import {
 import PlaceDetails from "../PlaceDetails/PlaceDetails";
 import useStyles from "./styles.js";
 
+import { useAtomValue } from "jotai";
+import { provinceAtom } from "atom/provinceAtom";
 const List = ({
 	places,
 	type,
@@ -31,11 +33,11 @@ const List = ({
 				.map((_, i) => refs[i] || createRef()),
 		);
 	}, [places]);
-
+	const provinceValue = useAtomValue(provinceAtom);
 	return (
 		<div className={classes.container}>
 			<Typography variant="h4">
-				<span className="capitalize">{type}</span> around you
+				<span className="capitalize">{type}</span> around {provinceValue.name}
 			</Typography>
 			{isLoading ? (
 				<div className={classes.loading}>
@@ -68,11 +70,7 @@ const List = ({
 							<MenuItem value="4.5">Above 4.5</MenuItem>
 						</Select>
 					</FormControl>
-					<Grid
-						container
-						spacing={3}
-						className={`no-scrollbar ${classes.list}`}
-					>
+					<Grid container spacing={3} className={`${classes.list}`}>
 						{places?.map(
 							(place, i) =>
 								place.latitude &&
