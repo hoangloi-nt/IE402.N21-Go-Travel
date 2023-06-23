@@ -6,7 +6,7 @@ import { doc, updateDoc } from "firebase/firestore";
 const SearchResult = ({ place, type, places, setPlaces }) => {
 	const { id } = useParams();
 	let selected = false;
-	if (places.some((e) => e.location_id === place.location_id)) {
+	if (places?.some((e) => e.location_id === place.location_id)) {
 		selected = true;
 	}
 	const handleUpdate = async () => {
@@ -22,13 +22,12 @@ const SearchResult = ({ place, type, places, setPlaces }) => {
 			type: type || "",
 			image: place?.photo.images.original.url || "",
 		};
-
-		setPlaces([...places, tripAdd]);
-		console.log(places);
 		const colRef = doc(db, "trips", id);
+		const newPlaces = places ? [...places, tripAdd] : [tripAdd];
 		await updateDoc(colRef, {
-			tripDetails: [...places, tripAdd],
+			tripDetails: newPlaces,
 		});
+		setPlaces(newPlaces);
 		toast.success("Đã thêm vào chuyến đi!");
 	};
 

@@ -10,13 +10,6 @@ import LocationItem from "components/locationItem/locationItem";
 import { useParams } from "react-router-dom";
 import NewMap from "components/NewMap/NewMap";
 
-const FakeTour = {
-  Name: "Tour cuối năm",
-  Description: "Đi 2 người",
-  Month: 6,
-  Year: 2023,
-};
-
 const TourDetails = () => {
 	const { id } = useParams();
 	const [places, setPlaces] = useState();
@@ -44,11 +37,13 @@ const TourDetails = () => {
 		}
 		fetchData();
 	}, [id]);
-	console.log(distance);
 	const convertSecondToTime = (seconds) => {
 		const days = Math.floor(seconds / 86400);
 		const hours = Math.floor((seconds % 86400) / 3600);
 		const minutes = Math.floor((seconds % 3600) / 60);
+		if (days === 0) {
+			return `${hours} giờ ${minutes} phút`;
+		}
 		return `${days} ngày ${hours} giờ ${minutes} phút`;
 	};
 	const getDate = () => {
@@ -66,13 +61,13 @@ const TourDetails = () => {
 		setLastUpdateTime(result);
 		return result;
 	};
-
+	console.log("places:", places);
 	return (
 		<>
 			<Header />
 			<div className="bg-white">
 				<div className="relative grid grid-cols-8">
-					<div className="max-h-[calc(100vh-90px)] col-span-2 overflow-y-scroll shadow-2xl no-scrollbar">
+					<div className="max-h-[calc(100vh-90px)] col-span-2 overflow-y-scroll shadow-2xl no-scrollbar pb-[80px]">
 						<span className="font-smibold text-[24px] flex justify-between mx-5 mt-5">
 							{data?.title}
 						</span>
@@ -84,28 +79,30 @@ const TourDetails = () => {
 						</p>
 						<p className="mt-3 mx-5 mb-5 text-[14px]">
 							Quãng đường đi dự kiến:
-							<span className="font-semibold"> {distance} </span>km
+							<span className="font-semibold">
+								{places?.length === 0 ? " 0 " : distance}
+							</span>
+							km
 						</p>
 						<p className="mt-3 mx-5 mb-5  text-[14px]">
 							Thời gian đi dự kiến:
 							<span className="font-semibold">
-								{" "}
-								{convertSecondToTime(duration)}{" "}
+								{places?.length === 0 ? " 0" : convertSecondToTime(duration)}
 							</span>
 						</p>
 						<div className="flex flex-col">
-							{places?.map((place, index) => (
-								<Grid key={index} item xs={12}>
-									<LocationItem
-										index={index}
-										places={places}
-										selected={Number(childClicked) === index}
-										location={place}
-										setPlaces={setPlaces}
-										getDate={getDate}
-									></LocationItem>
-								</Grid>
-							))}
+							{places &&
+								places?.map((place, index) => (
+									<Grid key={index} item xs={12}>
+										<LocationItem
+											index={index}
+											places={places}
+											location={place}
+											setPlaces={setPlaces}
+											getDate={getDate}
+										></LocationItem>
+									</Grid>
+								))}
 						</div>
 					</div>
 					<div className="col-span-6">
@@ -115,6 +112,7 @@ const TourDetails = () => {
 								setDistance={setDistance}
 								setDuration={setDuration}
 								places={places}
+								coords={coords}
 							></NewMap>
 						)}
 					</div>

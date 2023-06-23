@@ -7,12 +7,14 @@ import { useParams } from "react-router-dom";
 const LocationItem = ({ location, index, places, setPlaces, getDate }) => {
 	const [isMore, setIsMore] = useState(false);
 
+	const overlayRef = useRef(null);
+
 	useEffect(() => {
 		const onScroll = () => {
 			setIsMore(false);
 		};
-		window.addEventListener("scroll", onScroll);
-	}, [isMore]);
+		window.addEventListener("mousewheel", onScroll);
+	}, []);
 
 	const array_move = (arr, old_index, new_index) => {
 		if (new_index >= arr.length) {
@@ -65,6 +67,7 @@ const LocationItem = ({ location, index, places, setPlaces, getDate }) => {
 					tripDetails: places,
 				});
 				setPlaces([...places]);
+
 				setIsMore(false);
 				Swal.fire("Đã xóa!");
 			}
@@ -124,13 +127,14 @@ const LocationItem = ({ location, index, places, setPlaces, getDate }) => {
 				{/* Modal See more */}
 				{isMore && (
 					<>
-						{/* <div
+						<div
 							className="fixed top-0 bottom-0 left-0 right-0 z-[5] cursor-default"
+							ref={overlayRef}
 							onClick={(e) => {
 								e.preventDefault();
 								setIsMore(!isMore);
 							}}
-						></div> */}
+						></div>
 						<div
 							className="see-more-location absolute py-[10px] right-[13px] top-[45px] bg-white shadow-2xl z-[6]"
 							onClick={(e) => e.preventDefault()}
@@ -147,7 +151,7 @@ const LocationItem = ({ location, index, places, setPlaces, getDate }) => {
 							</p>
 							<p
 								className={`px-[24px] font-normal py-[8px] text-[14px] ${
-									index === places.length
+									index === places.length - 1
 										? "pointer-events-none disabled text-[#ccc] cursor-none"
 										: ""
 								}`}
