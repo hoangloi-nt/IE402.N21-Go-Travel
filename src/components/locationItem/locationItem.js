@@ -6,7 +6,6 @@ import Swal from "sweetalert2";
 import { useParams } from "react-router-dom";
 import { useSetAtom, useAtomValue } from "jotai";
 import { provinceAtom } from "atom/provinceAtom";
-import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 const LocationItem = ({ location, index, places, setPlaces, getDate }) => {
 	const [isMore, setIsMore] = useState(false);
@@ -79,7 +78,6 @@ const LocationItem = ({ location, index, places, setPlaces, getDate }) => {
 	const navigate = useNavigate();
 	return (
 		<div
-			// href="/province-detail"
 			className="block mb-7"
 			onClick={() => {
 				setProvinceAtom({
@@ -88,7 +86,7 @@ const LocationItem = ({ location, index, places, setPlaces, getDate }) => {
 					name: location.name,
 				});
 
-				navigate("/province-detail");
+				// navigate("/province-detail");
 			}}
 		>
 			<img
@@ -158,7 +156,7 @@ const LocationItem = ({ location, index, places, setPlaces, getDate }) => {
 								className={`px-[24px] font-normal py-[8px] text-[14px] ${
 									index === 0
 										? "pointer-events-none disabled text-[#ccc] cursor-none"
-										: ""
+										: "cursor-pointer"
 								}`}
 								onClick={() => moveUp()}
 							>
@@ -168,14 +166,14 @@ const LocationItem = ({ location, index, places, setPlaces, getDate }) => {
 								className={`px-[24px] font-normal py-[8px] text-[14px] ${
 									index === places.length - 1
 										? "pointer-events-none disabled text-[#ccc] cursor-none"
-										: ""
+										: "cursor-pointer"
 								}`}
 								onClick={() => moveDown()}
 							>
 								Move down
 							</p>
 							<p
-								className="px-[24px] font-normal py-[8px] text-[14px]"
+								className="px-[24px] font-normal py-[8px] text-[14px] cursor-pointer"
 								onClick={() => handleDeleteTrip()}
 							>
 								Remove from trip

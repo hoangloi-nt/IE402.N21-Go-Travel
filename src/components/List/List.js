@@ -36,9 +36,12 @@ const List = ({
 	const provinceValue = useAtomValue(provinceAtom);
 	return (
 		<div className={classes.container}>
-			<Typography variant="h4">
-				<span className="capitalize">{type}</span> around {provinceValue.name}
-			</Typography>
+			<div className="ml-[5px] text-[24px] font-semibold">
+				{type === "restaurants" && "Nhà hàng "}
+				{type === "hotels" && "Khách sạn "}
+				{type === "attractions" && "Điểm thú vị "} xung quanh {""}
+				{provinceValue.name}
+			</div>
 			{isLoading ? (
 				<div className={classes.loading}>
 					<CircularProgress size="5rem" />
@@ -46,15 +49,15 @@ const List = ({
 			) : (
 				<>
 					<FormControl className={classes.formControl}>
-						<InputLabel id="type">Type</InputLabel>
+						<InputLabel id="type">Loại</InputLabel>
 						<Select
 							id="type"
 							value={type}
 							onChange={(e) => setType(e.target.value)}
 						>
-							<MenuItem value="restaurants">Restaurants</MenuItem>
-							<MenuItem value="hotels">Hotels</MenuItem>
-							<MenuItem value="attractions">Attractions</MenuItem>
+							<MenuItem value="restaurants">Nhà hàng</MenuItem>
+							<MenuItem value="hotels">Khách sạn</MenuItem>
+							<MenuItem value="attractions">Điểm thú vị</MenuItem>
 						</Select>
 					</FormControl>
 					<FormControl className={classes.formControl}>
