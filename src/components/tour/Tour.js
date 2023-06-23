@@ -40,6 +40,7 @@ const Tour = ({
       end_day: values.end_day,
     });
     toast.success("Cập nhật chuyến đi thành công!");
+    setOpenModal(!openModal);
   };
 
   //   Xóa trips

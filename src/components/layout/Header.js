@@ -2,16 +2,39 @@ import UserIcon from "assets/icons/UserIcon";
 import { NavLink } from "react-router-dom";
 import { useAtomValue, useSetAtom } from "jotai";
 import { userAtom } from "atom/userAtom";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut, updatePassword } from "firebase/auth";
 import Swal from "sweetalert2";
 import { auth, db } from "../../firebase/firebase-config";
-import { useEffect } from "react";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import {
+  collection,
+  doc,
+  getDoc,
+  onSnapshot,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 const Header = () => {
   const setUserAtom = useSetAtom(userAtom);
+  const [profileModal, setProfileModal] = useState(false);
   const navigate = useNavigate();
+
+  const { control, handleSubmit, setValue, reset } = useForm({
+    mode: "onChange",
+    defaultValues: {
+      title: "",
+      image: "",
+      begin_location: "",
+      start_day: "",
+      end_day: "",
+      user: {},
+    },
+  });
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -71,6 +94,55 @@ const Header = () => {
     });
   };
 
+  useEffect(() => {
+    if (!userInfo?.uid) return;
+    async function fetchData() {
+      const colRef = doc(db, "users", userInfo.uid);
+      const docData = await getDoc(colRef);
+      reset(docData && docData.data());
+      setValue("password", "");
+      setValue("confirmPassword", "");
+    }
+    fetchData();
+  }, [reset, setValue, userInfo?.uid]);
+
+  const handleUpdateUser = async (values) => {
+    if (values.password !== values.confirmPassword) {
+      toast.error("Mật khẩu xác nhận không chính xác!");
+      return;
+    }
+    if (!values.password && !values.confirmPassword) {
+      try {
+        const colRef = doc(db, "users", userInfo?.uid);
+        const docData = await getDoc(colRef);
+        await updateDoc(colRef, {
+          ...values,
+          password: docData.data().password || "",
+          confirmPassword: docData.data().confirmPassword || "",
+        });
+        toast.success("Cập nhật thông tin thành công!");
+      } catch (error) {
+        console.log(error);
+        toast.error("Cập nhật thất bại");
+      }
+    } else {
+      try {
+        const colRef = doc(db, "users", userInfo?.uid);
+        await updateDoc(colRef, {
+          ...values,
+        });
+        if (values.password) {
+          await updatePassword(auth.currentUser, values.password);
+        }
+        toast.success("Cập nhật thông tin thành công!");
+      } catch (error) {
+        console.log(error);
+        toast.error("Cập nhật thất bại");
+      }
+    }
+    setProfileModal(!profileModal);
+  };
+
   return (
     <div className="bg-[#6557B9] w-full sticky top-0 z-[1111]">
       <div className="flex items-center justify-between text-white page-container px-9 py-[22px]">
@@ -104,7 +176,10 @@ const Header = () => {
           >
             {userInfo ? (
               <>
-                <p className="transition-all cursor-pointer hover:-translate-x-2">
+                <p
+                  className="transition-all cursor-pointer hover:-translate-x-2"
+                  onClick={() => setProfileModal(!profileModal)}
+                >
                   Thông tin cá nhân
                 </p>
                 <p
@@ -133,6 +208,109 @@ const Header = () => {
           </div>
         </div>
       </div>
+      {profileModal && (
+        <div
+          className="fixed inset-0 z-10 bg-black bg-opacity-50"
+          onClick={() => setProfileModal(!profileModal)}
+        >
+          <div
+            className="absolute z-20 px-5 py-6 -translate-x-1/2 -translate-y-1/2 bg-white rounded shadow-md left-1/2 top-1/2"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <form onSubmit={handleSubmit(handleUpdateUser)}>
+              <h2 className="mb-10 text-xl font-semibold text-center">
+                THÔNG TIN CÁ NHÂN
+              </h2>
+              <div className="flex items-center justify-between mb-5 gap-x-3">
+                <label htmlFor="firstName">First Name:</label>
+                <Controller
+                  control={control}
+                  name="firstName"
+                  id="firstName"
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      placeholder="Nhập firstName"
+                      type="text"
+                      className="w-[380px]"
+                    />
+                  )}
+                />
+              </div>
+              <div className="flex items-center justify-between mb-5 gap-x-3">
+                <label htmlFor="lastName">Last Name:</label>
+                <Controller
+                  control={control}
+                  name="lastName"
+                  id="lastName"
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      placeholder="Nhập lastName"
+                      type="text"
+                      className="w-[380px]"
+                    />
+                  )}
+                />
+              </div>
+              <div className="flex items-center justify-between mb-5 gap-x-3">
+                <label htmlFor="email">Email:</label>
+                <Controller
+                  control={control}
+                  name="email"
+                  id="email"
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      placeholder="Nhập email"
+                      type="email"
+                      className="w-[380px]"
+                    />
+                  )}
+                />
+              </div>
+              <div className="flex items-center justify-between mb-5 gap-x-5">
+                <label htmlFor="password">Mật khẩu</label>
+                <Controller
+                  control={control}
+                  name="password"
+                  id="password"
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      placeholder="Nhập mật khẩu mới"
+                      type="password"
+                      className="w-[380px]"
+                    />
+                  )}
+                />
+              </div>
+              <div className="flex items-center justify-between mb-5 gap-x-5">
+                <label htmlFor="confirmPassword">Nhập lại mật khẩu</label>
+                <Controller
+                  control={control}
+                  name="confirmPassword"
+                  id="confirmPassword"
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      type="password"
+                      className="w-[380px]"
+                      placeholder="Nhập lại mật khẩu mới"
+                    />
+                  )}
+                />
+              </div>
+              <button
+                type="submit"
+                className="block px-4 py-3 mx-auto text-white transition-all rounded-md bg-purple-1 hover:opacity-70"
+              >
+                Cập nhật
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
