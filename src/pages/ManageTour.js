@@ -59,6 +59,7 @@ const ManageTour = () => {
     } catch (error) {
       console.log(error);
     }
+    setOpenModal(!openModal);
   };
 
   useEffect(() => {

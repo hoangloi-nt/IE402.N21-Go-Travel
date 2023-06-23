@@ -1,27 +1,25 @@
 import axios from "axios";
 
 export const getPlacesData = async (sw, ne, type) => {
-
-	try {
-		const {
-			data: { data },
-		} = await axios.get(
-			`https://travel-advisor.p.rapidapi.com/${type}/list-in-boundary`,
-			{
-				params: {
-					bl_latitude: sw.lat,
-					bl_longitude: sw.lng,
-					tr_longitude: ne.lng,
-					tr_latitude: ne.lat,
-				},
-				headers: {
-					"x-rapidapi-key":
-						"75e6f4b7e6msh9280109288d26a3p1e1c83jsn0c41f1586d8f",
-					"x-rapidapi-host": "travel-advisor.p.rapidapi.com",
-				},
-			},
-		);
-
+  try {
+    const {
+      data: { data },
+    } = await axios.get(
+      `https://travel-advisor.p.rapidapi.com/${type}/list-in-boundary`,
+      {
+        params: {
+          bl_latitude: sw.lat,
+          bl_longitude: sw.lng,
+          tr_longitude: ne.lng,
+          tr_latitude: ne.lat,
+        },
+        headers: {
+          "x-rapidapi-key":
+            "174b0d6ea4mshd6d3787b92e1a2ep1d4a0cjsn6ba9d8c2d758",
+          "x-rapidapi-host": "travel-advisor.p.rapidapi.com",
+        },
+      }
+    );
 
     return data;
   } catch (error) {
@@ -46,7 +44,7 @@ export const fetchDataLocation = async ({ offset, limit }) => {
         limit: limit,
       },
       headers: {
-        "X-RapidAPI-Key": "75e6f4b7e6msh9280109288d26a3p1e1c83jsn0c41f1586d8f",
+        "X-RapidAPI-Key": "174b0d6ea4mshd6d3787b92e1a2ep1d4a0cjsn6ba9d8c2d758",
         "X-RapidAPI-Host": "travel-advisor.p.rapidapi.com",
       },
     });
