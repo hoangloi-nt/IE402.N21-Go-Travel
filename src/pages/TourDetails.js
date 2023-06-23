@@ -1,8 +1,7 @@
-import React, { useEffect, createRef } from "react";
-import Map from "components/Map/Map";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { db } from "../firebase/firebase-config";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { Grid } from "@material-ui/core";
 import Header from "components/layout/Header";
 import SearchBar from "components/searchBar/searchBar";
@@ -15,7 +14,6 @@ const TourDetails = () => {
 	const [places, setPlaces] = useState();
 	const [data, setData] = useState();
 	const [coords, setCoords] = useState();
-	const [childClicked, setChildClicked] = useState(null);
 	const [distance, setDistance] = useState("");
 	const [duration, setDuration] = useState("");
 	const [lastUpdateTime, setLastUpdateTime] = useState("");
@@ -61,7 +59,6 @@ const TourDetails = () => {
 		setLastUpdateTime(result);
 		return result;
 	};
-	console.log("places:", places);
 	return (
 		<>
 			<Header />

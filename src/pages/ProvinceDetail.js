@@ -6,14 +6,18 @@ import { getPlacesData } from "api";
 import List from "components/List/List";
 import Header from "components/layout/Header";
 import SearchIcon from "@material-ui/icons/Search";
+import { useAtomValue } from "jotai";
+import { provinceAtom } from "atom/provinceAtom";
 
 const ProvinceDetail = () => {
+	const provinceValue = useAtomValue(provinceAtom);
+	// console.log(provinceValue);
 	const [type, setType] = useState("restaurants");
 	const [rating, setRating] = useState("");
 
-	const [coords, setCoords] = useState();
+	const [coords, setCoords] = useState([]);
 	const [bounds, setBounds] = useState(null);
-
+	const [mounted, setMoundted] = useState(false);
 	const [filteredPlaces, setFilteredPlaces] = useState([]);
 	const [places, setPlaces] = useState([]);
 
@@ -23,28 +27,29 @@ const ProvinceDetail = () => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
-		navigator.geolocation.getCurrentPosition(
-			({ coords: { latitude, longitude } }) => {
-				setCoords({ lat: latitude, lng: longitude });
-			},
-		);
+		// navigator.geolocation.getCurrentPosition(
+		// 	({ coords: { latitude, longitude } }) => {
+		// 		setCoords({ lat: latitude, lng: longitude });
+		// 	},
+		// );
+		setCoords({ lat: provinceValue.lat, lng: provinceValue.lng });
 	}, []);
 	useEffect(() => {
-		const filtered = places.filter((place) => Number(place.rating) > rating);
-
+		const filtered = places?.filter((place) => Number(place.rating) > rating);
 		setFilteredPlaces(filtered);
 	}, [places, rating]);
 	useEffect(() => {
 		if (bounds) {
 			setIsLoading(true);
 			getPlacesData(bounds?.sw, bounds?.ne, type).then((data) => {
+				// console.log(data);
 				setPlaces(data.filter((place) => place.name && place.num_reviews > 0));
 				setFilteredPlaces([]);
 				setRating("");
 				setIsLoading(false);
 			});
 		}
-	}, [bounds, type]);
+	}, [mounted, type]);
 	const onLoad = (autoC) => setAutocomplete(autoC);
 
 	const onPlaceChanged = () => {
@@ -70,7 +75,7 @@ const ProvinceDetail = () => {
 						></List>
 					</div>
 					<div className="col-span-7">
-						<Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
+						{/* <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
 							<div className="z-[10] absolute top-5 right-5 w-[328px] p-5 bg-white text-[14px] rounded-sm drop-shadow-md">
 								<p className="mb-4">Tìm và thêm địa điểm</p>
 								<div className="relative">
@@ -85,7 +90,7 @@ const ProvinceDetail = () => {
 									</div>
 								</div>
 							</div>
-						</Autocomplete>
+						</Autocomplete> */}
 
 						{coords && (
 							<Map
@@ -94,6 +99,7 @@ const ProvinceDetail = () => {
 								setCoords={setCoords}
 								coords={coords}
 								places={filteredPlaces?.length ? filteredPlaces : places}
+								setMoundted={setMoundted}
 							/>
 						)}
 					</div>
