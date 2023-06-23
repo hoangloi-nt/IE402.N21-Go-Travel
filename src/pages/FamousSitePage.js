@@ -6,8 +6,8 @@ import bannerImg from "assets/images/banner-img.png";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper";
-import axios from "axios";
 import { BounceLoading } from "components/bounceLoading";
+import { fetchDataLocation } from "api";
 
 const FamousSitePage = () => {
   const [locations, setLocations] = useState({
@@ -16,34 +16,6 @@ const FamousSitePage = () => {
     location3: [],
   });
   const [loading, setLoading] = useState(false);
-
-  const fetchDataLocation = async ({ offset, limit }) => {
-    try {
-      const response = await axios.request({
-        method: "GET",
-        url: "https://travel-advisor.p.rapidapi.com/attractions/list-in-boundary",
-        params: {
-          tr_longitude: "109.262909",
-          tr_latitude: "12.346705",
-          bl_longitude: "109.095887",
-          bl_latitude: "12.113245",
-          currency: "USD",
-          lunit: "km",
-          lang: "en_US",
-          offset: offset,
-          limit: limit,
-        },
-        headers: {
-          "X-RapidAPI-Key":
-            "75e6f4b7e6msh9280109288d26a3p1e1c83jsn0c41f1586d8f",
-          "X-RapidAPI-Host": "travel-advisor.p.rapidapi.com",
-        },
-      });
-      return response.data.data;
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   useEffect(() => {
     setLoading(true);
@@ -104,7 +76,7 @@ const FamousSitePage = () => {
       <div className="bg-white page-container px-[113px]">
         <div className="mb-[40px]">
           <h1 className="mb-[21px] text-2xl font-bold">Địa điểm nổi tiếng</h1>
-		  {loading &&  <BounceLoading />}
+          {loading && <BounceLoading />}
           <Swiper
             spaceBetween={35}
             grabCursor={true}
@@ -131,7 +103,7 @@ const FamousSitePage = () => {
           <h1 className="pt-10 mb-[21px] text-2xl font-bold">
             Địa điểm hot gần đậy
           </h1>
-		  {loading &&  <BounceLoading />}
+          {loading && <BounceLoading />}
           <Swiper
             spaceBetween={35}
             grabCursor={true}
@@ -158,7 +130,7 @@ const FamousSitePage = () => {
           <h1 className="pt-10 mb-[21px] text-2xl font-bold">
             Địa điểm thư giãn cho mua hè
           </h1>
-		  {loading &&  <BounceLoading />}
+          {loading && <BounceLoading />}
           <Swiper
             spaceBetween={35}
             grabCursor={true}
