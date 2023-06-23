@@ -1,30 +1,19 @@
 import locationNow from "../../assets/locationNow.svg";
-import {
-	useJsApiLoader,
-	GoogleMap,
-	Marker,
-	Autocomplete,
-	DirectionsRenderer,
-} from "@react-google-maps/api";
+import { GoogleMap, Marker, DirectionsRenderer } from "@react-google-maps/api";
 import { useEffect, useRef, useState } from "react";
 
-const center = { lat: 48.8584, lng: 2.2945 };
+function NewMap({ places, setDistance, setDuration, coords }) {
+	const yourLocation = coords;
 
-function NewMap({ places, setDistance, setDuration }) {
-	const { isLoaded } = useJsApiLoader({
-		googleMapsApiKey: "AIzaSyCMtJ_nbYUAttdbH2XSSQ7Bl-cBNTwSAEg",
-		libraries: ["places"],
-	});
-
-	const [map, setMap] = useState(/** @type google.maps.Map */ (null));
 	const [directionsResponse, setDirectionsResponse] = useState(null);
 	async function calculateRoute(wayPoints) {
 		// eslint-disable-next-line no-undef
 		const directionsService = new google.maps.DirectionsService();
+
 		const results = await directionsService.route({
 			origin: {
-				lat: Number(places[0].latitude),
-				lng: Number(places[0].longitude),
+				lat: Number(yourLocation.lat),
+				lng: Number(yourLocation.lng),
 			},
 			destination: {
 				lat: Number(places[places.length - 1].latitude),
@@ -53,7 +42,7 @@ function NewMap({ places, setDistance, setDuration }) {
 		if (places?.length > 0) {
 			let wayPoints = [];
 			places?.forEach((place, i) => {
-				if (i !== 0 && i !== places.length - 1)
+				if (i !== places.length - 1)
 					wayPoints.push({
 						location: {
 							lat: Number(place.latitude),
@@ -71,7 +60,7 @@ function NewMap({ places, setDistance, setDuration }) {
 			{/* Google Map Box */}
 			<GoogleMap
 				key="AIzaSyCMtJ_nbYUAttdbH2XSSQ7Bl-cBNTwSAEg"
-				center={center}
+				center={yourLocation}
 				zoom={15}
 				mapContainerStyle={{ width: "100%", height: "100%" }}
 				options={{
@@ -80,22 +69,20 @@ function NewMap({ places, setDistance, setDuration }) {
 					mapTypeControl: false,
 					fullscreenControl: false,
 				}}
-				onLoad={(map) => setMap(map)}
 			>
-				{directionsResponse && (
-					<>
-						<DirectionsRenderer
-							directions={directionsResponse}
-							options={{
-								polylineOptions: {
-									strokeColor: "#1a73e8", // màu sắc của đường dây
-									strokeWeight: 5, // độ rộng của đường dây
-									strokeOpacity: 1, // độ mờ của đường dây
-									strokeDasharray: [10, 10],
-								},
-							}} // kiểu nét của đường dây } }}
-						/>
-					</>
+				{places?.length === 0 && <Marker position={yourLocation} />}
+				{directionsResponse && places?.length !== 0 && (
+					<DirectionsRenderer
+						directions={directionsResponse}
+						options={{
+							polylineOptions: {
+								strokeColor: "#1a73e8", // màu sắc của đường dây
+								strokeWeight: 5, // độ rộng của đường dây
+								strokeOpacity: 1, // độ mờ của đường dây
+								strokeDasharray: [10, 10],
+							},
+						}} // kiểu nét của đường dây } }}
+					/>
 				)}
 			</GoogleMap>
 		</div>
