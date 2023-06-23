@@ -5,9 +5,13 @@ import { useEffect } from "react";
 import { searchPlacesData } from "api/searchLocationAPI";
 import { CircularProgress, setRef } from "@material-ui/core";
 const SearchBar = ({ places, setPlaces }) => {
+	let typingTimer;
+	const doneTypingInterval = 250;
 	const searchBarRef = useRef(null);
 	const [searchResults, setSearchResults] = useState();
 	const [value, setValue] = useState();
+	const [searchValue, setSearchValue] = useState();
+
 	const [showResult, setShowResult] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	useEffect(() => {
@@ -17,10 +21,9 @@ const SearchBar = ({ places, setPlaces }) => {
 			searchPlacesData({ query: value }).then((data) => {
 				setSearchResults(data);
 				setIsLoading(false);
-				console.log(data);
 			});
 		}
-	}, [value]);
+	}, [searchValue]);
 	useEffect(() => {
 		const handleClickOutside = (e) => {
 			if (searchBarRef.current && !searchBarRef.current.contains(e.target)) {
@@ -48,6 +51,16 @@ const SearchBar = ({ places, setPlaces }) => {
 					name="name"
 					onFocus={() => setShowResult(true)}
 					placeholder="Tìm kiếm địa điểm"
+					onKeyDown={() => {
+						clearTimeout(typingTimer);
+					}}
+					onKeyUp={(e) => {
+						clearTimeout(typingTimer);
+						typingTimer = setTimeout(
+							() => setSearchValue(value),
+							doneTypingInterval,
+						);
+					}}
 				/>
 				<div className="absolute left-[5px] top-[50%] translate-y-[-50%]">
 					<SearchIcon />

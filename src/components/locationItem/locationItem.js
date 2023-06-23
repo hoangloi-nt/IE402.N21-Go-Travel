@@ -1,13 +1,54 @@
 import React, { useState, useEffect, useRef } from "react";
+import { db } from "../../firebase/firebase-config";
+import { doc, updateDoc } from "firebase/firestore";
 import Rating from "@material-ui/lab/Rating";
-import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-const LocationItem = ({ location, setSelectMore }) => {
+import { useParams } from "react-router-dom";
+const LocationItem = ({ location, index, places, setPlaces, getDate }) => {
 	const [isMore, setIsMore] = useState(false);
-	const moreRef = useRef(null);
 
-	const handleDeleteTrip = async (docId) => {
-		// const colRef = doc(db, "trips", docId);
+	useEffect(() => {
+		const onScroll = () => {
+			setIsMore(false);
+		};
+		window.addEventListener("scroll", onScroll);
+	}, [isMore]);
+
+	const array_move = (arr, old_index, new_index) => {
+		if (new_index >= arr.length) {
+			var k = new_index - arr.length + 1;
+			while (k--) {
+				arr.push(undefined);
+			}
+		}
+		arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+		return arr; // for testing
+	};
+	const moveUp = async () => {
+		const newPlaces = array_move(places, index, index - 1);
+
+		const colRef = doc(db, "trips", id);
+		await updateDoc(colRef, {
+			lastUpdateTime: getDate(),
+			tripDetails: newPlaces,
+		});
+		setPlaces([...newPlaces]);
+		setIsMore(false);
+	};
+	const moveDown = async () => {
+		const newPlaces = array_move(places, index, index + 1);
+		const colRef = doc(db, "trips", id);
+		await updateDoc(colRef, {
+			lastUpdateTime: getDate(),
+			tripDetails: newPlaces,
+		});
+		setPlaces([...newPlaces]);
+		setIsMore(false);
+	};
+
+	const { id } = useParams();
+	const handleDeleteTrip = async () => {
+		places.splice(index, 1);
 		Swal.fire({
 			title: "Bạn có muốn xóa?",
 			icon: "warning",
@@ -18,14 +59,20 @@ const LocationItem = ({ location, setSelectMore }) => {
 			confirmButtonText: "Có",
 		}).then(async (result) => {
 			if (result.isConfirmed) {
-				// await deleteDoc(colRef);
+				const colRef = doc(db, "trips", id);
+				await updateDoc(colRef, {
+					lastUpdateTime: getDate(),
+					tripDetails: places,
+				});
+				setPlaces([...places]);
+				setIsMore(false);
 				Swal.fire("Đã xóa!");
 			}
 		});
 	};
 
 	return (
-		<a className="mb-7" href="/province-detail">
+		<a className="block mb-7" href="/province-detail">
 			<img
 				src={location?.image}
 				alt={location?.image}
@@ -46,7 +93,7 @@ const LocationItem = ({ location, setSelectMore }) => {
 						<></>
 					)}
 
-					{location.location_string !== "" ? (
+					{location.num_reviews !== "" ? (
 						<div className="flex items-center mt-2 text-[12px] gap-[10px]">
 							<Rating
 								name="read-only"
@@ -62,33 +109,50 @@ const LocationItem = ({ location, setSelectMore }) => {
 				</div>
 
 				<div
-					className="cursor-pointer py-[25px] px-[30px] h-[40px]"
+					className="cursor-pointer py-[25px] px-[30px]"
 					onClick={(e) => {
 						e.preventDefault();
 						setIsMore(!isMore);
 					}}
 				>
-					<img alt="see more" src="/images/see-more.svg"></img>
+					<img
+						alt="see more"
+						src="/images/see-more.svg"
+						className="min-w-[20px]"
+					></img>
 				</div>
 				{/* Modal See more */}
 				{isMore && (
 					<>
-						<div
+						{/* <div
 							className="fixed top-0 bottom-0 left-0 right-0 z-[5] cursor-default"
 							onClick={(e) => {
 								e.preventDefault();
 								setIsMore(!isMore);
 							}}
-						></div>
+						></div> */}
 						<div
 							className="see-more-location absolute py-[10px] right-[13px] top-[45px] bg-white shadow-2xl z-[6]"
-							ref={moreRef}
 							onClick={(e) => e.preventDefault()}
 						>
-							<p className="px-[24px] font-normal py-[8px] text-[14px]">
+							<p
+								className={`px-[24px] font-normal py-[8px] text-[14px] ${
+									index === 0
+										? "pointer-events-none disabled text-[#ccc] cursor-none"
+										: ""
+								}`}
+								onClick={() => moveUp()}
+							>
 								Move up
 							</p>
-							<p className="px-[24px] font-normal py-[8px] text-[14px]">
+							<p
+								className={`px-[24px] font-normal py-[8px] text-[14px] ${
+									index === places.length
+										? "pointer-events-none disabled text-[#ccc] cursor-none"
+										: ""
+								}`}
+								onClick={() => moveDown()}
+							>
 								Move down
 							</p>
 							<p

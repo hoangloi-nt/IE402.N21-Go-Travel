@@ -5,7 +5,7 @@ export const searchPlacesData = async ({ query }) => {
 		const {
 			data: { data },
 		} = await axios.get(
-			`https://travel-advisor.p.rapidapi.com/locations/search`,
+			`https://travel-advisor.p.rapidapi.com/locations/auto-complete`,
 			{
 				params: {
 					query: query,
@@ -13,7 +13,7 @@ export const searchPlacesData = async ({ query }) => {
 				},
 				headers: {
 					"x-rapidapi-key":
-						"7f35bae2d7msh16b3b59c8875bcbp142730jsna9bca751f82e",
+						"75e6f4b7e6msh9280109288d26a3p1e1c83jsn0c41f1586d8f",
 					"x-rapidapi-host": "travel-advisor.p.rapidapi.com",
 				},
 			},

@@ -23,7 +23,7 @@ const PlaceDetails = ({ place, selected, refProp }) => {
 	const classes = useStyles();
 
 	return (
-		<Card elevation={6}>
+		<div>
 			<CardMedia
 				style={{ height: 200 }}
 				image={
@@ -86,7 +86,7 @@ const PlaceDetails = ({ place, selected, refProp }) => {
 					Website
 				</Button>
 			</CardActions>
-		</Card>
+		</div>
 	);
 };
 
