@@ -23,6 +23,8 @@ const ManageTour = () => {
 
   const userInfo = useAtomValue(userAtom);
 
+  const [userVal, setUserVal] = useState(null);
+
   const { control, handleSubmit, setValue, reset } = useForm({
     mode: "onChange",
     defaultValues: {
@@ -37,16 +39,15 @@ const ManageTour = () => {
 
   //   Chức năng POST trip lên Firebase
   const addTrip = async (values) => {
-    console.log(values);
+    console.log("addtrips", userInfo?.uid);
+    console.log("values", values);
     try {
       const colRef = collection(db, "trips");
       await addDoc(colRef, {
         ...values,
         createdAt: serverTimestamp(),
+        user: userVal,
       });
-      console.log(trips, values);
-      // const addTrip = trips.push(values);
-      // setTrips([...addTrip]);
       toast.success("Tạo chuyến đi mới thành công!");
       reset({
         title: "",
@@ -67,13 +68,14 @@ const ManageTour = () => {
     async function fetchUserData() {
       const colRef = doc(db, "users", userInfo?.uid);
       const docData = await getDoc(colRef);
-      setValue("user", {
-        id: docData?.id,
-        ...docData.data(),
-      });
+      // setValue("user", {
+      //   id: docData?.id,
+      //   ...docData.data(),
+      // });
+      setUserVal({ id: docData?.id, ...docData.data() });
     }
     fetchUserData();
-  }, [setValue, userInfo]);
+  }, [setValue, userInfo?.uid]);
 
   //   Gọi tất cả trips của user hiện tại ra và lưu và trips
   useEffect(() => {
@@ -91,7 +93,7 @@ const ManageTour = () => {
         setTrips(result);
       });
     }
-  }, [userInfo]);
+  }, [userInfo?.email, userInfo?.uid]);
 
   return (
     <Layout>
